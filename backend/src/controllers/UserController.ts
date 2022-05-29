@@ -21,12 +21,12 @@ type IndexQuery = {
 export const index = async (req: Request, res: Response): Promise<Response> => {
   const { searchParam, pageNumber } = req.query as IndexQuery;
 
-  const { users, count, hasMore,usersId } = await ListUsersService({
+  const { users, count, hasMore, usersId } = await ListUsersService({
     searchParam,
     pageNumber
   });
 
-  return res.json({ users, count, hasMore ,usersId});
+  return res.json({ users, count, hasMore, usersId });
 };
 
 export const store = async (req: Request, res: Response): Promise<Response> => {
@@ -62,11 +62,7 @@ export const store = async (req: Request, res: Response): Promise<Response> => {
 
 export const reset = async (req: Request, res: Response): Promise<Response> => {
   const { email } = req.body;
-
-//criar servidor, alterar senha do user, enviar para o email a nova senha
-
-const user = await ResetPassService({ email });
-console.log(user);
+  await ResetPassService({ email });
   return res.status(200).json();
 };
 
