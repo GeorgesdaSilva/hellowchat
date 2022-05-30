@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
+import React, { useState, useEffect, useRef, useContext, useCallback } from "react";
 
 import { useHistory, useParams } from "react-router-dom";
 import { parseISO, format, isSameDay } from "date-fns";
@@ -26,13 +26,13 @@ import toastError from "../../errors/toastError";
 const useStyles = makeStyles(theme => ({
 	ticket: {
 		position: "relative",
-		borderRadius:10
-		
+		borderRadius: 10
+
 	},
 
 	pendingTicket: {
 		cursor: "unset",
-		
+
 	},
 
 	noTicketsDiv: {
@@ -61,7 +61,7 @@ const useStyles = makeStyles(theme => ({
 	contactNameWrapper: {
 		display: "flex",
 		justifyContent: "space-between",
-		
+
 	},
 
 	lastMessageTime: {
@@ -91,8 +91,7 @@ const useStyles = makeStyles(theme => ({
 	},
 
 	acceptButton: {
-		position: "absolute",
-		left: "50%",
+		marginLeft: 5
 	},
 
 	ticketQueueColor: {
@@ -116,8 +115,24 @@ const useStyles = makeStyles(theme => ({
 		paddingRight: 5,
 		borderRadius: 10,
 		fontSize: "0.9em",
-		background:"#fe527a"
+		background: "#fe527a"
 	},
+	markdown: {
+		display: "flex",
+		flexDirection: "column",
+		padding: 0,
+		margin: 0
+
+	},
+	markdownLabel: {
+		margin: 0,
+		padding: 0
+	},
+	markdownTime: {
+		margin: 0,
+		padding: 0,
+		color: "#2AB912"
+	}
 }));
 
 const TicketListItem = ({ ticket }) => {
@@ -127,12 +142,58 @@ const TicketListItem = ({ ticket }) => {
 	const { ticketId } = useParams();
 	const isMounted = useRef(true);
 	const { user } = useContext(AuthContext);
+	const [timePending, setTimePending] = useState(0);
+
+
+	const timeTicket = useCallback(() => {
+
+		var timeTicketPendind;
+		if (timePending <= 0) {
+
+
+			var startDate = new Date();
+
+			var endDate = new Date(ticket.updatedAt);
+
+			var diff = (endDate.getTime() - startDate.getTime()) / 1000;
+			diff /= 60;
+			timeTicketPendind = Math.abs(Math.round(diff));
+
+			setTimePending(timeTicketPendind);
+		} else {
+			setInterval(() => {
+
+
+				var startDate = new Date();
+
+				var endDate = new Date(ticket.updatedAt);
+
+				var diff = (endDate.getTime() - startDate.getTime()) / 1000;
+				diff /= 60;
+				timeTicketPendind = Math.abs(Math.round(diff));
+
+				setTimePending(timeTicketPendind);
+			}, 60000)
+		}
+
+
+		// var hours = Math.floor(totalMinutes / 60);
+		// var minutes = totalMinutes % 60;
+
+
+	}, [ticket.updatedAt, timePending]
+	)
+
 
 	useEffect(() => {
+		timeTicket();
 		return () => {
 			isMounted.current = false;
+
 		};
-	}, []);
+	}, [timeTicket]);
+
+
 
 	const handleAcepptTicket = async id => {
 		setLoading(true);
@@ -172,11 +233,11 @@ const TicketListItem = ({ ticket }) => {
 				<Tooltip
 					arrow
 					placement="right"
-					
+
 					title={ticket.queue?.name || "Sem fila"}
 				>
 					<span
-						style={{ backgroundColor: ticket.queue?.color || "#7C7C7C" ,borderRadius:"10px 0px 0px 10px"}}
+						style={{ backgroundColor: ticket.queue?.color || "#7C7C7C", borderRadius: "10px 0px 0px 10px" }}
 						className={classes.ticketQueueColor}
 					></span>
 				</Tooltip>
@@ -200,7 +261,7 @@ const TicketListItem = ({ ticket }) => {
 									className={classes.closedBadge}
 									badgeContent={"closed"}
 									color="primary"
-									
+
 								/>
 							)}
 							{ticket.lastMessage && (
@@ -232,14 +293,67 @@ const TicketListItem = ({ ticket }) => {
 								color="textSecondary"
 							>
 								{ticket.lastMessage ? (
-									<MarkdownWrapper>{ticket.lastMessage}</MarkdownWrapper>
+
+									<div className={classes.markdown}>
+										<MarkdownWrapper>{ticket.lastMessage}</MarkdownWrapper>
+										<p className={classes.markdownLabel}> {
+
+											ticket.status === "open" ? i18n.t("ticketsList.timeTicketOpen") : null || ticket.status === "pending" ? i18n.t("ticketsList.timeTicketPending") : null
+
+										} <strong className={classes.markdownTime}>
+												{ticket.status === "pending" || ticket.status === "open" ? `${timePending} min` : null}
+
+
+											</strong>
+											{ticket.status === "pending" && (
+												<ButtonWithSpinner
+													color="primary"
+													variant="contained"
+													className={classes.acceptButton}
+													size="small"
+													loading={loading}
+													onClick={e => handleAcepptTicket(ticket.id)}
+												>
+													{i18n.t("ticketsList.buttons.accept")}
+												</ButtonWithSpinner>
+											)}
+										</p>
+
+
+									</div>
+
 								) : (
-									<br />
+									<div className={classes.markdown}>
+
+										<p className={classes.markdownLabel}> {
+
+											ticket.status === "open" ? i18n.t("ticketsList.timeTicketOpen") : null || ticket.status === "pending" ? i18n.t("ticketsList.timeTicketPending") : null
+
+										} <strong className={classes.markdownTime}>
+											{ticket.status === "pending" || ticket.status === "open" ? `${timePending} min` : null}
+
+
+											</strong>
+											{ticket.status === "pending" && (
+												<ButtonWithSpinner
+													color="primary"
+													variant="contained"
+													className={classes.acceptButton}
+													size="small"
+													loading={loading}
+													onClick={e => handleAcepptTicket(ticket.id)}
+												>
+													{i18n.t("ticketsList.buttons.accept")}
+												</ButtonWithSpinner>
+											)}
+										</p>
+
+									</div>
 								)}
 							</Typography>
 
 							<Badge
-							
+
 								className={classes.newMessagesCount}
 								badgeContent={ticket.unreadMessages}
 								classes={{
@@ -249,18 +363,7 @@ const TicketListItem = ({ ticket }) => {
 						</span>
 					}
 				/>
-				{ticket.status === "pending" && (
-					<ButtonWithSpinner
-						color="primary"
-						variant="contained"
-						className={classes.acceptButton}
-						size="small"
-						loading={loading}
-						onClick={e => handleAcepptTicket(ticket.id)}
-					>
-						{i18n.t("ticketsList.buttons.accept")}
-					</ButtonWithSpinner>
-				)}
+
 			</ListItem>
 			<Divider variant="inset" component="li" />
 		</React.Fragment>

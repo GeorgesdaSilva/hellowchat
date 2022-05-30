@@ -1,7 +1,6 @@
 import * as Yup from "yup";
 import User from "../../models/User";
 import AppError from "../../errors/AppError";
-import { SerializeUser } from "../../helpers/SerializeUser";
 import Crypto from 'crypto';
 const nodemailer = require('nodemailer')
 

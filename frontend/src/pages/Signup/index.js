@@ -82,7 +82,13 @@ const SignUp = () => {
 	const handleSignUp = async values => {
 		try {
 			await api.post("/auth/signup", values);
-			toast.success(i18n.t("signup.toasts.success"));
+			toast.success(i18n.t("signup.toasts.success"), {
+				style:{
+				  backgroundColor:"#D4EADD",
+				  color:"#64A57B"
+				}
+				 
+			  });
 			history.push("/login");
 		} catch (err) {
 			toastError(err);

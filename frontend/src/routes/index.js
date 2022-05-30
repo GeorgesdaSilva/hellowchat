@@ -23,7 +23,7 @@ const Routes = () => {
       <AuthProvider>
         <Switch>
           <Route exact path="/login" component={Login} />
-        
+
           <Route exact path="/reset/pass" component={ResetPass} />
           <WhatsAppsProvider>
             <LoggedInLayout>
@@ -53,7 +53,7 @@ const Routes = () => {
             </LoggedInLayout>
           </WhatsAppsProvider>
         </Switch>
-        <ToastContainer autoClose={3000} />
+        <ToastContainer autoClose={3000}  />
       </AuthProvider>
     </BrowserRouter>
   );

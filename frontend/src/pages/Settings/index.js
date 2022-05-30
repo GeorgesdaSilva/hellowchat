@@ -81,7 +81,13 @@ const Settings = () => {
 			await api.put(`/settings/${settingKey}`, {
 				value: selectedValue,
 			});
-			toast.success(i18n.t("settings.success"));
+			toast.success(i18n.t("settings.success"), {
+				style:{
+				  backgroundColor:"#D4EADD",
+				  color:"#64A57B"
+				}
+				 
+			  });
 		} catch (err) {
 			toastError(err);
 		}

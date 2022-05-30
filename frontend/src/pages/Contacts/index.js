@@ -188,7 +188,13 @@ const Contacts = () => {
   const handleDeleteContact = async (contactId) => {
     try {
       await api.delete(`/contacts/${contactId}`);
-      toast.success(i18n.t("contacts.toasts.deleted"));
+      toast.success(i18n.t("contacts.toasts.deleted"), {
+        style:{
+          backgroundColor:"#D4EADD",
+          color:"#64A57B"
+        }
+         
+      });
     } catch (err) {
       toastError(err);
     }

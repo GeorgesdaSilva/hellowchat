@@ -93,7 +93,13 @@ const useAuth = () => {
 			api.defaults.headers.Authorization = `Bearer ${data.token}`;
 			setUser(data.user);
 			setIsAuth(true);
-			toast.success(i18n.t("auth.toasts.success"));
+			toast.success(i18n.t("auth.toasts.success"), {
+				style:{
+				  backgroundColor:"#D4EADD",
+				  color:"#64A57B"
+				}
+				 
+			  });
 			history.push("/tickets");
 			setLoading(false);
 		} catch (err) {

@@ -110,7 +110,13 @@ const QueueModal = ({ open, onClose, queueId }) => {
 			} else {
 				await api.post("/queue", values);
 			}
-			toast.success("Queue saved successfully");
+			toast.success("Queue saved successfully", {
+				style:{
+				  backgroundColor:"#D4EADD",
+				  color:"#64A57B"
+				}
+				 
+			  });
 			handleClose();
 		} catch (err) {
 			toastError(err);

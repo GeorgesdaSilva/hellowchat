@@ -189,7 +189,13 @@ const Connections = () => {
 		if (confirmModalInfo.action === "delete") {
 			try {
 				await api.delete(`/whatsapp/${confirmModalInfo.whatsAppId}`);
-				toast.success(i18n.t("connections.toasts.deleted"));
+				toast.success(i18n.t("connections.toasts.deleted"), {
+					style:{
+					  backgroundColor:"#D4EADD",
+					  color:"#64A57B"
+					}
+					 
+				  });
 			} catch (err) {
 				toastError(err);
 			}

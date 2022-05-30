@@ -1,6 +1,6 @@
 import path from "path";
 import multer from "multer";
-
+const maxSize =1 * 1000 * 40000;//40mb
 const publicFolder = path.resolve(__dirname, "..", "..", "public");
 export default {
   directory: publicFolder,
@@ -11,6 +11,7 @@ export default {
       const fileName = new Date().getTime() + path.extname(file.originalname);
 
       return cb(null, fileName);
-    }
-  })
+    },
+  
+  }),limits: { fileSize: maxSize }
 };

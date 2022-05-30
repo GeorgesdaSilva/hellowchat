@@ -168,7 +168,13 @@ const QuickAnswers = () => {
   const handleDeleteQuickAnswers = async (quickAnswerId) => {
     try {
       await api.delete(`/quickAnswers/${quickAnswerId}`);
-      toast.success(i18n.t("quickAnswers.toasts.deleted"));
+      toast.success(i18n.t("quickAnswers.toasts.deleted"), {
+        style:{
+          backgroundColor:"#D4EADD",
+          color:"#64A57B"
+        }
+         
+      });
     } catch (err) {
       toastError(err);
     }

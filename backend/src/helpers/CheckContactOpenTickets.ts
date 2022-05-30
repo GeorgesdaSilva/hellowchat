@@ -1,7 +1,7 @@
 import { Op } from "sequelize";
 import AppError from "../errors/AppError";
 import Ticket from "../models/Ticket";
-
+import User from "../models/User";
 const CheckContactOpenTickets = async (
   contactId: number,
   whatsappId: number
@@ -11,7 +11,11 @@ const CheckContactOpenTickets = async (
   });
 
   if (ticket) {
-    throw new AppError("ERR_OTHER_OPEN_TICKET");
+    const user = await User.findOne({
+      where: { id: ticket.userId }
+    });
+
+    throw new AppError("ERR_OTHER_OPEN_TICKET", 400, user?.name);
   }
 };
 

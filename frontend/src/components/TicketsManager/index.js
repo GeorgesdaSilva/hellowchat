@@ -7,7 +7,7 @@ import InputBase from "@material-ui/core/InputBase";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Badge from "@material-ui/core/Badge";
-import CheckBoxIcon from "@material-ui/icons/CheckBox";
+
 
 import { Inboxes, Check2Circle, Search } from 'react-bootstrap-icons';
 

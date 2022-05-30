@@ -120,7 +120,13 @@ const Ticket = () => {
       }
 
       if (data.action === "delete") {
-        toast.success("Ticket deleted sucessfully.");
+        toast.success("Ticket deleted sucessfully.", {
+          style:{
+            backgroundColor:"#D4EADD",
+            color:"#64A57B"
+          }
+           
+        });
         history.push("/tickets");
       }
     });

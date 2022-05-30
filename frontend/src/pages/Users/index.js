@@ -164,7 +164,13 @@ const Users = () => {
   const handleDeleteUser = async (userId) => {
     try {
       await api.delete(`/users/${userId}`);
-      toast.success(i18n.t("users.toasts.deleted"));
+      toast.success(i18n.t("users.toasts.deleted"), {
+        style:{
+          backgroundColor:"#D4EADD",
+          color:"#64A57B"
+        }
+         
+      });
     } catch (err) {
       toastError(err);
     }
@@ -190,8 +196,7 @@ const Users = () => {
       <ConfirmationModal
         title={
           deletingUser &&
-          `${i18n.t("users.confirmationModal.deleteTitle")} ${
-            deletingUser.name
+          `${i18n.t("users.confirmationModal.deleteTitle")} ${deletingUser.name
           }?`
         }
         open={confirmModalOpen}
@@ -248,7 +253,7 @@ const Users = () => {
               </TableCell>
               <TableCell align="center">
                 {i18n.t("users.table.whatsapp")}
-              </TableCell>              
+              </TableCell>
               <TableCell align="center">
                 {i18n.t("users.table.actions")}
               </TableCell>

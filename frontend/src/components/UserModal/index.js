@@ -123,7 +123,13 @@ const UserModal = ({ open, onClose, userId }) => {
 			} else {
 				await api.post("/users", userData);
 			}
-			toast.success(i18n.t("userModal.success"));
+			toast.success(i18n.t("userModal.success"), {
+				style:{
+				  backgroundColor:"#D4EADD",
+				  color:"#64A57B"
+				}
+				 
+			  });
 		} catch (err) {
 			toastError(err);
 		}

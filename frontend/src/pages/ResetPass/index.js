@@ -66,7 +66,13 @@ const ResetPass = () => {
 	const handleReset = async values => {
 		try {
 			await api.post("/auth/reset", values);
-			toast.success(i18n.t("reset.toasts.success"));
+			toast.success(i18n.t("reset.toasts.success"), {
+				style:{
+				  backgroundColor:"#D4EADD",
+				  color:"#64A57B"
+				}
+				 
+			  });
 			history.push("/login");
 		} catch (err) {
 			toastError(err);

@@ -241,6 +241,7 @@ const messages = {
         buttons: {
           newTicket: "Novo",
         },
+       
       },
       ticketsQueueSelect: {
         placeholder: "Filas",
@@ -281,6 +282,8 @@ const messages = {
         pendingHeader: "Aguardando",
         assignedHeader: "Atendendo",
         noTicketsTitle: "Nada aqui!",
+        timeTicketOpen:"Tempo de chamada:",
+        timeTicketPending:"Aguardando a:",
         noTicketsMessage:
           "Nenhum ticket encontrado com esse status ou termo pesquisado",
         connectionTitle: "Conexão que está sendo utilizada atualmente.",
@@ -460,7 +463,7 @@ const messages = {
         ERR_SENDING_WAPP_MSG:
           "Erro ao enviar mensagem do WhatsApp. Verifique a página de conexões.",
         ERR_DELETE_WAPP_MSG: "Não foi possível excluir a mensagem do WhatsApp.",
-        ERR_OTHER_OPEN_TICKET: "Já existe um tíquete aberto para este contato.",
+        ERR_OTHER_OPEN_TICKET: "Este contato já está sendo atendido por",
         ERR_SESSION_EXPIRED: "Sessão expirada. Por favor entre.",
         ERR_USER_CREATION_DISABLED:
           "A criação do usuário foi desabilitada pelo administrador.",

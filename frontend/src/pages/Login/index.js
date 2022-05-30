@@ -174,7 +174,7 @@ const Login = () => {
         </Grid>
         <Grid container lg={6} xs={0}  justifyContent='center' alignContent="center">
           
-            <img src={Logo} height={512} width={512}/>
+            <img src={Logo} height={512} width={512} alt="logo"/>
           
         </Grid>
         <Grid container justifyContent="center" alignContent="center" xs={12}>

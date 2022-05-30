@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
   chatContainer: {
     border: "none", //
     boxShadow: "none", //
-    margin: "1rem 1rem", //
+    // marginLeft: "5px", //
    
     flex: 1,
     backgroundColor: "#F0F4F8", //

@@ -94,7 +94,13 @@ const WhatsAppModal = ({ open, onClose, whatsAppId }) => {
 			} else {
 				await api.post("/whatsapp", whatsappData);
 			}
-			toast.success(i18n.t("whatsappModal.success"));
+			toast.success(i18n.t("whatsappModal.success"), {
+				style:{
+				  backgroundColor:"#D4EADD",
+				  color:"#64A57B"
+				}
+				 
+			  });
 			handleClose();
 		} catch (err) {
 			toastError(err);

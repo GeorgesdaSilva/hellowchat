@@ -119,7 +119,13 @@ const ContactModal = ({ open, onClose, contactId, initialValues, onSave }) => {
 				}
 				handleClose();
 			}
-			toast.success(i18n.t("contactModal.success"));
+			toast.success(i18n.t("contactModal.success"), {
+				style:{
+				  backgroundColor:"#D4EADD",
+				  color:"#64A57B"
+				}
+				 
+			  });
 		} catch (err) {
 			toastError(err);
 		}
