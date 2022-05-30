@@ -22,7 +22,7 @@ interface Response {
 
 const ResetPassService = async ({
   email
-}: Request): Promise<Response | undefined> => {
+}: Request): Promise<void> => {
 
 
 
