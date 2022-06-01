@@ -153,12 +153,12 @@ const TicketListItem = ({ ticket }) => {
 
 			var startDate = new Date();
 
-			var endDate = new Date(ticket.updatedAt);
+			var endDate = new Date(ticket.durationDate);
 
 			var diff = (endDate.getTime() - startDate.getTime()) / 1000;
 			diff /= 60;
 			timeTicketPendind = Math.abs(Math.round(diff));
-
+			
 			setTimePending(timeTicketPendind);
 		} else {
 			setInterval(() => {
@@ -166,12 +166,12 @@ const TicketListItem = ({ ticket }) => {
 
 				var startDate = new Date();
 
-				var endDate = new Date(ticket.updatedAt);
+				var endDate = new Date(ticket.durationDate);
 
 				var diff = (endDate.getTime() - startDate.getTime()) / 1000;
 				diff /= 60;
 				timeTicketPendind = Math.abs(Math.round(diff));
-
+				
 				setTimePending(timeTicketPendind);
 			}, 60000)
 		}
@@ -330,7 +330,7 @@ const TicketListItem = ({ ticket }) => {
 											ticket.status === "open" ? i18n.t("ticketsList.timeTicketOpen") : null || ticket.status === "pending" ? i18n.t("ticketsList.timeTicketPending") : null
 
 										} <strong className={classes.markdownTime}>
-											{ticket.status === "pending" || ticket.status === "open" ? `${timePending} min` : null}
+												{ticket.status === "pending" || ticket.status === "open" ? `${timePending} min` : null}
 
 
 											</strong>

@@ -19,7 +19,7 @@ const FindOrCreateTicketService = async (
       whatsappId: whatsappId
     }
   });
-
+  var durationDate = new Date();
   if (ticket) {
     await ticket.update({ unreadMessages });
   }
@@ -38,6 +38,7 @@ const FindOrCreateTicketService = async (
         status: "pending",
         userId: null,
         unreadMessages
+        , durationDate: durationDate
       });
     }
   }
@@ -58,7 +59,7 @@ const FindOrCreateTicketService = async (
       await ticket.update({
         status: "pending",
         userId: null,
-        unreadMessages
+        unreadMessages, durationDate: durationDate
       });
     }
   }
@@ -69,7 +70,7 @@ const FindOrCreateTicketService = async (
       status: "pending",
       isGroup: !!groupContact,
       unreadMessages,
-      whatsappId
+      whatsappId, durationDate: durationDate
     });
   }
 

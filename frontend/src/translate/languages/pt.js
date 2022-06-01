@@ -304,13 +304,13 @@ const messages = {
         listItems: {
           dashboard: "Dashboard",
           connections: "Conexões",
-          tickets: "Tickets",
+          tickets: "Chats",
           contacts: "Contatos",
           quickAnswers: "Respostas Rápidas",
           queues: "Filas",
           administration: "Administração",
           users: "Usuários",
-          settings: "Configurações",
+          settings: "Config",
         },
         appBar: {
           user: {

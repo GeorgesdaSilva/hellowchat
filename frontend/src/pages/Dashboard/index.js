@@ -126,11 +126,11 @@ const Dashboard = () => {
 	const [ticketsClosedByMoth, setTicketsClosedByMoth] = useState([]);
 
 	const doughnutData = {
-		labels: ['Finalizados', 'Em Atendimento', 'Aguardando', 'Sem Atendimentos'],
+		labels: ['Finalizados', 'Em Atendimento', 'Aguardando'],
 		datasets: [
 			{
 				label: '# of Votes',
-				data: [closedTickets, openTickets, pendingTickets, 10],
+				data: [closedTickets, openTickets, pendingTickets, 0],
 
 				backgroundColor: [
 					'#98E3C3',

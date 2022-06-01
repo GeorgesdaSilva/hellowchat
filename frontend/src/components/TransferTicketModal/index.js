@@ -64,7 +64,7 @@ const TransferTicketModal = ({ modalOpen, onClose, ticketid, ticketWhatsappId })
 	}, []);
 
 	useEffect(() => {
-		if (!modalOpen || searchParam.length < 3) {
+		if (!modalOpen || searchParam.length < 1) {
 			setLoading(false);
 			return;
 		}

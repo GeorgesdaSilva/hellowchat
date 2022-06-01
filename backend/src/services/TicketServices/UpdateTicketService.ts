@@ -43,17 +43,19 @@ const UpdateTicketService = async ({
   if (oldStatus === "closed") {
     await CheckContactOpenTickets(ticket.contact.id, ticket.whatsappId);
   }
-
+const durationDate=new Date();
   await ticket.update({
     status,
     queueId,
-    userId
+    userId,
+    durationDate:durationDate
   });
 
 
   if(whatsappId) {
     await ticket.update({
-      whatsappId
+      whatsappId,
+      durationDate:durationDate
     });
   }
 

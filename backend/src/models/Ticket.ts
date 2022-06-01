@@ -40,6 +40,9 @@ class Ticket extends Model<Ticket> {
 
   @CreatedAt
   createdAt: Date;
+  
+  @Column({ defaultValue: new Date() })
+  durationDate: Date;
 
   @UpdatedAt
   updatedAt: Date;
