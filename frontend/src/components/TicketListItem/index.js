@@ -181,7 +181,7 @@ const TicketListItem = ({ ticket }) => {
 		// var minutes = totalMinutes % 60;
 
 
-	}, [ticket.updatedAt, timePending]
+	}, [ timePending,ticket.durationDate]
 	)
 
 

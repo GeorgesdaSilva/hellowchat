@@ -72,6 +72,7 @@ const messages = {
         title: "Conexões",
         toasts: {
           deleted: "Conexão com o WhatsApp excluída com sucesso!",
+          
         },
         confirmationModal: {
           deleteTitle: "Deletar",
@@ -482,6 +483,7 @@ const messages = {
           "Esta cor já está em uso, escolha outra.",
         ERR_WAPP_GREETING_REQUIRED:
           "A mensagem de saudação é obrigatório quando há mais de uma fila.",
+          ERR_LOGOUT_WHATS:"Erro ao desconectar, por favor desconecte através do smartphone."
       },
     },
   },

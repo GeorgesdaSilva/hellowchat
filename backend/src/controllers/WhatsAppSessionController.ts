@@ -3,6 +3,7 @@ import { getWbot } from "../libs/wbot";
 import ShowWhatsAppService from "../services/WhatsappService/ShowWhatsAppService";
 import { StartWhatsAppSession } from "../services/WbotServices/StartWhatsAppSession";
 import UpdateWhatsAppService from "../services/WhatsappService/UpdateWhatsAppService";
+import AppError from "../errors/AppError";
 
 const store = async (req: Request, res: Response): Promise<Response> => {
   const { whatsappId } = req.params;
@@ -31,8 +32,12 @@ const remove = async (req: Request, res: Response): Promise<Response> => {
   const whatsapp = await ShowWhatsAppService(whatsappId);
 
   const wbot = getWbot(whatsapp.id);
+  try {
+    await wbot.logout();
+  } catch (e) {
+    throw new AppError("ERR_LOGOUT_WHATS");
+  }
 
-  wbot.logout();
 
   return res.status(200).json({ message: "Session disconnected." });
 };

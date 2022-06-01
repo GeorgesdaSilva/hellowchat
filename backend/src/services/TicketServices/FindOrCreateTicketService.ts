@@ -1,4 +1,4 @@
-import { subHours } from "date-fns";
+
 import { Op } from "sequelize";
 import Contact from "../../models/Contact";
 import Ticket from "../../models/Ticket";
@@ -20,9 +20,19 @@ const FindOrCreateTicketService = async (
     }
   });
   var durationDate = new Date();
-  if (ticket) {
-    await ticket.update({ unreadMessages });
-  }
+if(ticket?.status==="open"){
+  await ticket.update({ unreadMessages });
+}
+
+
+
+
+if(ticket?.status==="pending"){
+  await ticket.update({ unreadMessages });
+}
+  
+
+
 
   if (!ticket && groupContact) {
     ticket = await Ticket.findOne({
@@ -43,26 +53,26 @@ const FindOrCreateTicketService = async (
     }
   }
 
-  if (!ticket && !groupContact) {
-    ticket = await Ticket.findOne({
-      where: {
-        updatedAt: {
-          [Op.between]: [+subHours(new Date(), 2), +new Date()]
-        },
-        contactId: contact.id,
-        whatsappId: whatsappId
-      },
-      order: [["updatedAt", "DESC"]]
-    });
+  // if (!ticket && !groupContact) {
+  //   ticket = await Ticket.findOne({
+  //     where: {
+  //       updatedAt: {
+  //         [Op.between]: [+subHours(new Date(), 2), +new Date()]
+  //       },
+  //       contactId: contact.id,
+  //       whatsappId: whatsappId
+  //     },
+  //     order: [["updatedAt", "DESC"]]
+  //   });
 
-    if (ticket) {
-      await ticket.update({
-        status: "pending",
-        userId: null,
-        unreadMessages, durationDate: durationDate
-      });
-    }
-  }
+  //   if (ticket) {
+  //     await ticket.update({
+  //       status: "pending",
+  //       userId: null,
+  //       unreadMessages, durationDate: durationDate
+  //     });
+  //   }
+  // }
 
   if (!ticket) {
     ticket = await Ticket.create({

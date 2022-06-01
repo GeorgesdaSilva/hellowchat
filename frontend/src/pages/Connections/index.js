@@ -182,7 +182,9 @@ const Connections = () => {
 			try {
 				await api.delete(`/whatsappsession/${confirmModalInfo.whatsAppId}`);
 			} catch (err) {
+		
 				toastError(err);
+				
 			}
 		}
 

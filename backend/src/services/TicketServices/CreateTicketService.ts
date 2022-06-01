@@ -28,6 +28,7 @@ const CreateTicketService = async ({
     const user = await User.findByPk(userId, { include: ["queues"]});
     queueId = user?.queues.length === 1 ? user.queues[0].id : undefined;
   }
+
 const durationDate=new Date();
   const { id }: Ticket = await defaultWhatsapp.$create("ticket", {
     contactId,
@@ -37,6 +38,7 @@ const durationDate=new Date();
     queueId,
     durationDate:durationDate
   });
+ 
 
   const ticket = await Ticket.findByPk(id, { include: ["contact"] });
 

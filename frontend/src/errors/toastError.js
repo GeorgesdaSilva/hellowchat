@@ -12,28 +12,44 @@ const toastError = err => {
 			if (errorMsg === "ERR_OTHER_OPEN_TICKET") {
 				toast.error(i18n.t(`backendErrors.${errorMsg}`) + ` ${err.response?.data.user}`, {
 					toastId: errorMsg,
-					style:{
+					style: {
 						backgroundColor: '#FFC1CE',
-						color:"#93344A",
+						color: "#93344A",
 						// fontWeight:"bold"
 					}
-					
+
 				});
 			} else {
 				toast.error(i18n.t(`backendErrors.${errorMsg}`), {
 					toastId: errorMsg,
-					className:"error"
+					className: "error",
+					style: {
+						backgroundColor: '#FFC1CE',
+						color: "#93344A",
+						// fontWeight:"bold"
+					}
 				});
 			}
 
 		} else {
 			toast.error(errorMsg, {
 				toastId: errorMsg,
-				className:"error"
+				className: "error",
+				style: {
+					backgroundColor: '#FFC1CE',
+					color: "#93344A",
+					// fontWeight:"bold"
+				}
 			});
 		}
 	} else {
-		toast.error("An error occurred!");
+		toast.error("An error occurred!", {
+			style: {
+				backgroundColor: '#FFC1CE',
+				color: "#93344A",
+				// fontWeight:"bold"
+			}
+		});
 	}
 };
 
