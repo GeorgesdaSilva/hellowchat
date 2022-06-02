@@ -115,6 +115,8 @@ export const update = async (
         body: formatBody(farewellMessage, ticket.contact),
         ticket
       });
+
+      
     }
   }
 

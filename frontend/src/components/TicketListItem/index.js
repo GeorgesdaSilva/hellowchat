@@ -131,7 +131,16 @@ const useStyles = makeStyles(theme => ({
 	markdownTime: {
 		margin: 0,
 		padding: 0,
+		// color: "#2AB912"
+	},
+	green: {
 		color: "#2AB912"
+	},
+	yellow: {
+		color: "#FBA72A"
+	},
+	red: {
+		color: "#FB2A2A"
 	}
 }));
 
@@ -158,7 +167,7 @@ const TicketListItem = ({ ticket }) => {
 			var diff = (endDate.getTime() - startDate.getTime()) / 1000;
 			diff /= 60;
 			timeTicketPendind = Math.abs(Math.round(diff));
-			
+
 			setTimePending(timeTicketPendind);
 		} else {
 			setInterval(() => {
@@ -171,7 +180,7 @@ const TicketListItem = ({ ticket }) => {
 				var diff = (endDate.getTime() - startDate.getTime()) / 1000;
 				diff /= 60;
 				timeTicketPendind = Math.abs(Math.round(diff));
-				
+
 				setTimePending(timeTicketPendind);
 			}, 60000)
 		}
@@ -181,7 +190,7 @@ const TicketListItem = ({ ticket }) => {
 		// var minutes = totalMinutes % 60;
 
 
-	}, [ timePending,ticket.durationDate]
+	}, [timePending, ticket.durationDate]
 	)
 
 
@@ -300,7 +309,7 @@ const TicketListItem = ({ ticket }) => {
 
 											ticket.status === "open" ? i18n.t("ticketsList.timeTicketOpen") : null || ticket.status === "pending" ? i18n.t("ticketsList.timeTicketPending") : null
 
-										} <strong className={classes.markdownTime}>
+										} <strong className={(classes.markdownTime, timePending <= 5 ? classes.green : timePending > 5 && timePending < 10 ? classes.yellow :  classes.red)}  >
 												{ticket.status === "pending" || ticket.status === "open" ? `${timePending} min` : null}
 
 
@@ -329,7 +338,7 @@ const TicketListItem = ({ ticket }) => {
 
 											ticket.status === "open" ? i18n.t("ticketsList.timeTicketOpen") : null || ticket.status === "pending" ? i18n.t("ticketsList.timeTicketPending") : null
 
-										} <strong className={classes.markdownTime}>
+										} <strong className={(classes.markdownTime, timePending <= 5 ? classes.green : timePending > 5 && timePending < 10 ? classes.yellow : classes.red)} >
 												{ticket.status === "pending" || ticket.status === "open" ? `${timePending} min` : null}
 
 

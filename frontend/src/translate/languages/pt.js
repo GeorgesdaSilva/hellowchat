@@ -126,7 +126,7 @@ const messages = {
         form: {
           name: "Nome",
           default: "Padrão",
-          farewellMessage: "Mensagem de despedida"
+          farewellMessage: "Para inserir o número de protocolo basta inserir {{protocolo}} em qualquer lugar da sua frase."
         },
         buttons: {
           okAdd: "Adicionar",
