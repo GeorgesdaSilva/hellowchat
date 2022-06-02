@@ -63,6 +63,7 @@ const ListTicketsService = async ({
     whereCondition = { queueId: { [Op.or]: [queueIds, null] } };
   }
 
+
   if (status) {
     whereCondition = {
       ...whereCondition,
@@ -88,7 +89,8 @@ const ListTicketsService = async ({
         },
         required: false,
         duplicating: false
-      }
+      },
+     
     ];
 
     whereCondition = {
@@ -102,6 +104,8 @@ const ListTicketsService = async ({
           )
         },
         { "$contact.number$": { [Op.like]: `%${sanitizedSearchParam}%` } },
+        { lastMessage: { [Op.like]:  `%${searchParam.toLocaleLowerCase()}%` } },
+
         {
           "$message.body$": where(
             fn("LOWER", col("body")),
@@ -111,6 +115,8 @@ const ListTicketsService = async ({
         }
       ]
     };
+
+ 
   }
 
   if (date) {

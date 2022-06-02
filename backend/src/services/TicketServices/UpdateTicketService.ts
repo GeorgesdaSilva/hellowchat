@@ -48,7 +48,7 @@ const durationDate=new Date();
     status,
     queueId,
     userId,
-    durationDate:durationDate
+    durationDate:durationDate,
   });
 
 
