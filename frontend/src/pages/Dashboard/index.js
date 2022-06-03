@@ -16,6 +16,20 @@ import MenuItem from '@material-ui/core/MenuItem';
 import toastError from "../../errors/toastError";
 
 
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+
+
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import Avatar from '@material-ui/core/Avatar';
+
+
 import api from "../../services/api";
 import {
 	Chart as ChartJS,
@@ -106,6 +120,10 @@ const useStyles = makeStyles(theme => ({
 		padding: 20,
 		height: 300,
 	},
+	tableCell: {
+		borderBottom: "none", fontSize: "12", color: "#888E93", fontWeight: "400", padding: 0, margin: 0
+
+	}
 
 }))
 const Dashboard = () => {
@@ -124,6 +142,7 @@ const Dashboard = () => {
 	const [pendingTickets, setPendingTickets] = useState(0);
 	const [closedTickets, setClosedTickets] = useState(0);
 	const [ticketsClosedByMoth, setTicketsClosedByMoth] = useState([]);
+	const [usersRanking, setUserRanking] = useState([]);
 
 	const doughnutData = {
 		labels: ['Finalizados', 'Em Atendimento', 'Aguardando'],
@@ -170,8 +189,6 @@ const Dashboard = () => {
 		maintainAspectRatio: false,
 
 	};
-
-
 
 	const LineData = {
 		labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
@@ -226,6 +243,8 @@ const Dashboard = () => {
 					setClosedTickets(data.closed)
 					setTicketsClosedByMoth(data.ticketsClosedByMoth)
 					// setTickets(data)
+					setUserRanking(data.usersRanking)
+
 
 
 				} catch (err) {
@@ -253,7 +272,7 @@ const Dashboard = () => {
 					{user.profile === 'admin' ? <Select
 						className={classes.dialogItems}
 						value={userId}
-                   
+
 						onChange={
 							(e) => setUserId(e.target.value)}
 						style={{ width: '150px' }}
@@ -418,7 +437,49 @@ const Dashboard = () => {
 						</Paper>
 					</Grid>
 
+					<Grid item lg={12} xs={12}>
+						<TableContainer component={Paper} elevation={0} style={{ padding: 13 }}>
+							<Table aria-label="a dense table" >
+								<TableHead>
+									<TableRow>
+										<p className={classes.tableCell} style={{ paddingLeft: 60, paddingBottom: 10, paddingTop: 10 }}>Ranking Atendimento</p>
 
+									</TableRow>
+									<TableRow>
+										<TableCell className={classes.tableCell}>Nome</TableCell>
+										<TableCell className={classes.tableCell} align="center">Em Atendimento</TableCell>
+										<TableCell className={classes.tableCell} align="center">Finalizados</TableCell>
+
+									</TableRow>
+								</TableHead>
+								<TableBody >
+									{usersRanking.map((user, i) => (
+										<TableRow
+											key={user.id}
+											style={i % 2 === 0 ? {} : { backgroundColor: "#F5F5F5" }}
+										>
+											<TableCell component="th" scope="row" style={{ borderBottom: "none", padding: 3 }}>
+
+												<ListItem>
+													<ListItemAvatar>
+														<Avatar>
+
+															{user.name.charAt(0)}
+														</Avatar>
+													</ListItemAvatar>
+													<ListItemText className={classes.tableCell} primary={user.name} secondary="" />
+												</ListItem>
+
+											</TableCell>
+											<TableCell align="center" className={classes.tableCell}>{user.countOpen}</TableCell>
+											<TableCell align="center" className={classes.tableCell}>{user.countClosed}</TableCell>
+
+										</TableRow>
+									))}
+								</TableBody>
+							</Table>
+						</TableContainer>
+					</Grid>
 				</Grid>
 			</Container>
 		</div >

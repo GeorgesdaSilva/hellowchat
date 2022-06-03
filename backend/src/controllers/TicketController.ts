@@ -157,11 +157,11 @@ export const fullfilter = async (req: Request, res: Response): Promise<Response>
 
 
   const {
-    tickets,
+    // tickets,
     ticketsClosedByMoth,
     open,
     pending,
-    closed } = await ListTicketsServiceFull({
+    closed ,usersRanking} = await ListTicketsServiceFull({
       dateIni,
       dateFin,
       userId,
@@ -169,6 +169,6 @@ export const fullfilter = async (req: Request, res: Response): Promise<Response>
 
     });
 
-  return res.status(200).json({ tickets, ticketsClosedByMoth, open: open, pending: pending, closed: closed });
+  return res.status(200).json({ /*tickets*/ ticketsClosedByMoth, open: open, pending: pending, closed: closed,usersRanking });
 };
 
