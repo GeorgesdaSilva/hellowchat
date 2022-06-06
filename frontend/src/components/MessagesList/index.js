@@ -260,6 +260,11 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "inherit",
     padding: 10,
   },
+  lastMessage:{
+   
+    padding:5,
+    margin:0
+  }
 }));
 
 const reducer = (state, action) => {
@@ -321,6 +326,7 @@ const MessagesList = ({ ticketId, isGroup }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const messageOptionsMenuOpen = Boolean(anchorEl);
   const currentTicketId = useRef(ticketId);
+  const [ticket,setTicket]=useState({})
 
   useEffect(() => {
     dispatch({ type: "RESET" });
@@ -338,7 +344,11 @@ const MessagesList = ({ ticketId, isGroup }) => {
             params: { pageNumber },
           });
 
+
+
+          
           if (currentTicketId.current === ticketId) {
+            
             dispatch({ type: "LOAD_MESSAGES", payload: data.messages });
             setHasMore(data.hasMore);
             setLoading(false);
@@ -347,6 +357,10 @@ const MessagesList = ({ ticketId, isGroup }) => {
           if (pageNumber === 1 && data.messages.length > 1) {
             scrollToBottom();
           }
+        
+
+          setTicket(data.ticket)
+          
         } catch (err) {
           setLoading(false);
           toastError(err);
@@ -701,13 +715,20 @@ const MessagesList = ({ ticketId, isGroup }) => {
         menuOpen={messageOptionsMenuOpen}
         handleClose={handleCloseMessageOptionsMenu}
       />
+       
       <div
         id="messagesList"
         className={classes.messagesList}
         onScroll={handleScroll}
       >
         {messagesList.length > 0 ? renderMessages() : []}
+      
+  
       </div>
+      {
+      ticket.status==="closed" ? <p className={classes.lastMessage}>{ticket.lastMessage}</p>:null
+     }
+    
       {loading && (
         <div>
           <CircularProgress className={classes.circleLoading} />

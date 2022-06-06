@@ -5,8 +5,8 @@ import Ticket from "../../models/Ticket";
 import ListUsersService from "../UserServices/ListUsersService";
 
 interface Request {
-  dateIni?: string;
-  dateFin?: string;
+  dateInitial?: string;
+  dateFinal?: string;
   userId?: string;
 
 
@@ -27,7 +27,7 @@ interface Response {
 }
 
 const ListTicketsServiceFull = async ({
-  dateIni, dateFin, userId
+  dateInitial, dateFinal, userId
 }: Request): Promise<Response> => {
   let conditions = {}
 
@@ -38,9 +38,11 @@ const ListTicketsServiceFull = async ({
     }
 
   }
-  if (dateIni
-    && dateFin) {
-    var createdAt = { [Op.between]: [+startOfDay(parseISO(dateIni)), +endOfDay(parseISO(dateFin))] }
+
+  if (dateInitial
+    && dateFinal) {
+    
+    var createdAt = { [Op.between]: [+startOfDay(parseISO(dateInitial)), +endOfDay(parseISO(dateFinal))] }
     conditions = {
       ...conditions,
       createdAt

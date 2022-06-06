@@ -24,8 +24,8 @@ type IndexQuery = {
 
 
 type FilterFullQuery = {
-  dateIni: string;
-  dateFin: string;
+  dateInitial: string;
+  dateFinal: string;
   userId: string;
 
 };
@@ -148,8 +148,8 @@ export const remove = async (
 
 export const fullfilter = async (req: Request, res: Response): Promise<Response> => {
   const {
-    dateIni,
-    dateFin,
+    dateInitial,
+    dateFinal,
     userId,
 
 
@@ -162,8 +162,8 @@ export const fullfilter = async (req: Request, res: Response): Promise<Response>
     open,
     pending,
     closed ,usersRanking} = await ListTicketsServiceFull({
-      dateIni,
-      dateFin,
+      dateInitial,
+      dateFinal,
       userId,
 
 

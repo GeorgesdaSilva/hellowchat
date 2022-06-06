@@ -127,15 +127,15 @@ const useStyles = makeStyles(theme => ({
 
 }))
 const Dashboard = () => {
-
+	
 	const classes = useStyles()
 
 	const { user } = useContext(AuthContext);
 	// const [tickets, setTickets] = useState([]);
 	const [userId, setUserId] = useState(user.profile === "user" ? user.id : null);
 	const [users, setUsers] = useState([]);
-	const [dateIni, setDateIni] = useState(new Date().setDate(new Date().getDate() - 7));
-	const [dateFin, setDateFin] = useState(new Date());
+	const [dateIni, setDateIni] = useState();
+	const [dateFin, setDateFin] = useState();
 	const [open, setOpen] = useState(false);
 	const [active, setActive] = useState(0);
 	const [openTickets, setOpenTickets] = useState(0);
@@ -220,6 +220,7 @@ const Dashboard = () => {
 
 	const buttonSearchByUserId = ({ dateInitial, dateFinal, userId }) => {
 		handleClose();
+
 
 		const delayDebounceFn = setTimeout(() => {
 			const fetchTickets = async () => {
@@ -338,8 +339,11 @@ const Dashboard = () => {
 	};
 
 	useEffect(() => {
-		user.profile === "admin" ? buttonSearchByUserId({ dateInitial: dateIni, dateFinal: dateFin }) :
-			buttonSearchByUserId({ dateInitial: dateIni, dateFinal: dateFin, userId: user.id });
+		var init = new Date();
+		var final = new Date();
+		init.setDate(init.getDate() - 7);
+		user.profile === "admin" ? buttonSearchByUserId({ dateInitial: init, dateFinal: final }) :
+			buttonSearchByUserId({ dateInitial: init, dateFinal: final, userId: user.id });
 
 
 	}, []);
@@ -352,34 +356,26 @@ const Dashboard = () => {
 
 				init.setDate(init.getDate() - 7);
 
-				setDateIni(init);
-				setDateFin(final);
-
-
+				user.profile === "admin" ? buttonSearchByUserId({ dateInitial: init, dateFinal: final }) :
+					buttonSearchByUserId({ dateInitial: init, datefinalal: final, userId: user.id });
 				break;
 			case 1:
 
 				init.setDate(init.getDate() - 14);
 
-				setDateIni(init);
-				setDateFin(final);
-
-
+				user.profile === "admin" ? buttonSearchByUserId({ dateInitial: init, dateFinal: final }) :
+					buttonSearchByUserId({ dateInitial: init, datefinalal: final, userId: user.id });
 				break;
 			case 2:
 
 				init.setDate(init.getDate() - 30);
 
-				setDateIni(init);
-				setDateFin(final);
-
-
+				user.profile === "admin" ? buttonSearchByUserId({ dateInitial: init, dateFinal: final }) :
+					buttonSearchByUserId({ dateInitial: init, datefinalal: final, userId: user.id });
 				break;
 			case 3:
-
-				setDateIni('');
-				setDateFin('');
-
+				user.profile === "admin" ? buttonSearchByUserId({}) :
+					buttonSearchByUserId({ userId: user.id });
 
 				break;
 
@@ -387,9 +383,8 @@ const Dashboard = () => {
 
 		}
 
+
 		setActive(i)
-		user.profile === "admin" ? buttonSearchByUserId({ dateInitial: dateIni, dateFinal: dateFin }) :
-			buttonSearchByUserId({ dateInitial: dateIni, dateFinal: dateFin, userId: user.id });
 
 	}
 
