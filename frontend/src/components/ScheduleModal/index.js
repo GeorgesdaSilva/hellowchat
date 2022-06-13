@@ -14,6 +14,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
+import ArrowBack from '@material-ui/icons/ArrowBack';
 import AddAlertIcon from '@material-ui/icons/AddAlert';
 import Add from '@material-ui/icons/Add';
 import Search from '@material-ui/icons/Search';
@@ -57,7 +58,7 @@ const useStyles = makeStyles(theme => ({
 
         backgroundColor: "#F0F4F8", height: 44, borderRadius: 10,
         fontSize: 15,
-        padding: 5
+        padding: 10
 
     },
     inputDescription: {
@@ -67,7 +68,7 @@ const useStyles = makeStyles(theme => ({
 
         flexDirection: "column",
 
-        padding: 5,
+        padding: 10,
         fontSize: 15
 
     },
@@ -97,13 +98,17 @@ const useStyles = makeStyles(theme => ({
     datePicker: {
         width: "100%", backgroundColor: "#F0F4F8", height: 44, borderRadius: 10,
         border: "none", textAlign: "center"
+    },
+    buttonBack: {
+        color: "#FE517B",
+        marginRight: 5
     }
 
 
 }));
 
 
-const ScheduleDialog = ({ handleClose, openStatus }) => {
+const ScheduleModal = ({ handleClose, openStatus }) => {
     var err = {
         response: {
             data: {
@@ -132,7 +137,7 @@ const ScheduleDialog = ({ handleClose, openStatus }) => {
     const [typeEvent, setTypeEvent] = React.useState(1);
     const [recorrencia, setRecorrencia] = React.useState(1);
     const [level, setLevel] = React.useState(1);
-    const [notificationType, setNotificationType] = React.useState([]);
+    const [notificationType, setNotificationType] = React.useState([1]);
     const [notifyDate, setNotifyDate] = React.useState(startDate);
     const [datesNotify, setDatesNotify] = React.useState([]);
     const [openContactModal, setOpenContactModal] = React.useState(false)
@@ -174,9 +179,9 @@ const ScheduleDialog = ({ handleClose, openStatus }) => {
             newSkipped = new Set(newSkipped.values());
             newSkipped.delete(activeStep);
         }
-        
+
         if (!topico) {
-            err.response.data.message = "Insira o tópico";
+            err.response.data.message = "Insira o título";
             toastError(err);
 
         } else if (!locale) {
@@ -197,9 +202,9 @@ const ScheduleDialog = ({ handleClose, openStatus }) => {
 
 
     };
-    // const handleBack = () => {
-    //     setActiveStep((prevActiveStep) => prevActiveStep - 1);
-    // };
+    const handleBack = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    };
 
 
     const saveSchedule = () => {
@@ -210,7 +215,7 @@ const ScheduleDialog = ({ handleClose, openStatus }) => {
             toastError(err);
 
         } else if (participantes.length <= 0) {
-            err.response.data.message = "Insira algum participante na reunião";
+            err.response.data.message = "Insira algum usuário na reunião";
             toastError(err);
 
 
@@ -373,24 +378,19 @@ const ScheduleDialog = ({ handleClose, openStatus }) => {
         );
         setUsers([]);
         setAnfitriao([]);
-
         setParticipantes([]);
-
         setTopico('');
         setLocale('');
         setDescription('');
         setTypeEvent(1);
         setRecorrencia(1);
         setLevel(1);
-        setNotificationType([]);
+        setNotificationType([1]);
         setNotifyDate(startDate);
         setDatesNotify([]);
         setOpenContactModal(false)
         setOptions([]);
         setSearchParam('')
-
-
-
         handleClose()
     }
 
@@ -427,8 +427,8 @@ const ScheduleDialog = ({ handleClose, openStatus }) => {
 
                             <Grid item xs={12} className={classes.gridRow}  >
                                 <Grid item xs={11} >
-                                    <Typography variant="subtitle1" ><strong>Detalhes</strong></Typography>
-                                    <TextField InputProps={{ disableUnderline: true, className: classes.input }} defaultValue={topico} onChange={(e) => setTopico(e.target.value)} placeholder="Tópico" fullWidth />
+                                    <Typography variant="subtitle1" ><strong>{i18n.t("scheduleModal.subtitles.title")}</strong></Typography>
+                                    <TextField InputProps={{ disableUnderline: true, className: classes.input }} defaultValue={topico} onChange={(e) => setTopico(e.target.value)} placeholder={i18n.t("scheduleModal.labels.topic")} fullWidth />
 
                                 </Grid>
                             </Grid>
@@ -482,7 +482,7 @@ const ScheduleDialog = ({ handleClose, openStatus }) => {
                             <Grid container className={classes.gridRow} style={{ justifyContent: "center", alignItems: "flex-start" }}>
 
                                 <Grid item xs={4} style={{ display: "flex", flexDirection: "column", }} >
-                                    <Typography variant="subtitle1" ><strong>Tipo de evento</strong></Typography>
+                                    <Typography variant="subtitle1" ><strong>{i18n.t("scheduleModal.subtitles.typeEvent")}</strong></Typography>
                                     <FormGroup>
                                         <FormControlLabel control={<Checkbox checked={typeEvent === 1} className={classes.checkbox} onChange={() => setTypeEvent(1)} />} label={<Typography variant='caption'>local</Typography>} style={{ height: 20, }} />
                                         <FormControlLabel control={<Checkbox checked={typeEvent === 2} className={classes.checkbox} onChange={() => setTypeEvent(2)} />} label={<Typography variant='caption'>Online</Typography>} style={{ height: 20 }} />
@@ -491,7 +491,7 @@ const ScheduleDialog = ({ handleClose, openStatus }) => {
                                 </Grid>
 
                                 <Grid item xs={3} style={{ display: "flex", flexDirection: "column", }} >
-                                    <Typography variant="subtitle1" ><strong>Recorrência</strong></Typography>
+                                    <Typography variant="subtitle1" ><strong>{i18n.t("scheduleModal.subtitles.recurrence")}</strong></Typography>
                                     <FormGroup >
                                         <FormControlLabel control={<Checkbox checked={recorrencia === 1} onChange={() => setRecorrencia(1)} className={classes.checkbox} />} label={<Typography variant='caption'>Apenas uma vez</Typography>} style={{ height: 20 }} />
                                         <FormControlLabel control={<Checkbox checked={recorrencia === 2} onChange={() => setRecorrencia(2)} className={classes.checkbox} />} label={<Typography variant='caption'>Semanal</Typography>} style={{ height: 20 }} />
@@ -501,7 +501,7 @@ const ScheduleDialog = ({ handleClose, openStatus }) => {
 
                                 </Grid>
                                 <Grid item xs={4} style={{ display: "flex", flexDirection: "column", }} >
-                                    <Typography variant="subtitle1" ><strong>Prioridade</strong></Typography>
+                                    <Typography variant="subtitle1" ><strong>{i18n.t("scheduleModal.subtitles.priority")}</strong></Typography>
                                     <FormGroup>
                                         <FormControlLabel control={<Checkbox checked={level === 1} onChange={() => setLevel(1)} className={classes.checkbox} />} label={<Typography variant='caption'>Baixo</Typography>} style={{ height: 20 }} />
                                         <FormControlLabel control={<Checkbox checked={level === 2} onChange={() => setLevel(2)} className={classes.checkbox} />} label={<Typography variant='caption'>Médio</Typography>} style={{ height: 20 }} />
@@ -513,7 +513,7 @@ const ScheduleDialog = ({ handleClose, openStatus }) => {
                                 <Grid item xs={12} className={classes.gridRow}>
                                     <Grid item xs={11} >
 
-                                        <TextField InputProps={{ disableUnderline: true, className: classes.input }} defaultValue={locale} onChange={(e) => setLocale(e.target.value)} placeholder="Adicionar local" fullWidth />
+                                        <TextField InputProps={{ disableUnderline: true, className: classes.input }} defaultValue={locale} onChange={(e) => setLocale(e.target.value)} placeholder={i18n.t("scheduleModal.labels.locale")} fullWidth />
 
                                     </Grid>
 
@@ -521,9 +521,8 @@ const ScheduleDialog = ({ handleClose, openStatus }) => {
 
                                 <Grid item xs={12} className={classes.gridRow}>
                                     <Grid item xs={11} >
-                                        <Typography variant="subtitle1" ><strong>Descrição</strong></Typography>
-                                        <TextField InputProps={{ disableUnderline: true, className: classes.inputDescription, }} defaultValue={description} onChange={(e) => setDescription(e.target.value)} placeholder="Descrição do Agendamento exemplo Pauta 
-de reunião, Descrição de consulta"  fullWidth multiline />
+                                        <Typography variant="subtitle1" ><strong>{i18n.t("scheduleModal.subtitles.description")}</strong></Typography>
+                                        <TextField InputProps={{ disableUnderline: true, className: classes.inputDescription, }} defaultValue={description} onChange={(e) => setDescription(e.target.value)} placeholder={i18n.t("scheduleModal.labels.description")} fullWidth multiline />
 
                                     </Grid>
 
@@ -545,7 +544,7 @@ de reunião, Descrição de consulta"  fullWidth multiline />
 
                             <Grid item xs={12} className={classes.gridRow} style={{ marginTop: 0 }}>
                                 <Grid item xs={11} style={{ marginTop: 20 }} >
-                                    <Typography variant="subtitle1" ><strong>Anfitrião</strong></Typography>
+                                    <Typography variant="subtitle1" ><strong>{i18n.t("scheduleModal.subtitles.host")}</strong></Typography>
                                     <FormControl style={{ height: 44, width: "100%" }} className={classes.input}>
 
                                         <Select
@@ -583,7 +582,7 @@ de reunião, Descrição de consulta"  fullWidth multiline />
                             </Grid>
                             <Grid item xs={12} className={classes.gridRow}>
                                 <Grid item xs={11} >
-                                    <Typography variant="subtitle1" ><strong>Participantes</strong></Typography>
+                                    <Typography variant="subtitle1" ><strong>{i18n.t("scheduleModal.subtitles.attendants")}</strong></Typography>
                                     <FormControl style={{ height: 44, width: "100%" }} className={classes.input}>
 
                                         <Select
@@ -620,7 +619,7 @@ de reunião, Descrição de consulta"  fullWidth multiline />
                             </Grid>
                             <Grid item xs={12} className={classes.gridRow}>
                                 <Grid item xs={9} >
-                                    <Typography variant="subtitle1" ><strong>Participantes externos</strong></Typography>
+                                    <Typography variant="subtitle1" ><strong>{i18n.t("scheduleModal.subtitles.externals")}</strong></Typography>
                                     <FormControl style={{ height: 44, width: "100%" }} className={classes.input}>
 
                                         <Select
@@ -710,7 +709,7 @@ de reunião, Descrição de consulta"  fullWidth multiline />
                             <Grid item xs={12} className={classes.gridRow}>
                                 <Grid item xs={11}>
                                     <Grid item xs={12} style={{ display: "flex", flexDirection: "column", marginBottom: 5 }} >
-                                        <Typography variant="subtitle1" ><strong>Notificação</strong></Typography>
+                                        <Typography variant="subtitle1" ><strong>{i18n.t("scheduleModal.subtitles.notification")}</strong></Typography>
                                         <FormGroup style={{ display: "flex", flexDirection: "row" }}>
                                             <FormControlLabel control={<Checkbox style={{
                                                 transform: "scale(0.7)",
@@ -777,6 +776,9 @@ de reunião, Descrição de consulta"  fullWidth multiline />
 
                             <Grid item xs={12} className={classes.gridRow} style={{ marginTop: 113, marginBottom: 20 }}>
                                 <Grid item xs={11} style={{ display: "flex", justifyContent: "center", alignContent: "center", flexDirection: "row" }}>
+                                    <Button className={classes.buttonBack} onClick={() => handleBack()}>
+                                        <ArrowBack /></Button>
+
                                     <Button className={classes.button} onClick={() => saveSchedule()}>
                                         Salvar Agendamento</Button>
 
@@ -789,4 +791,4 @@ de reunião, Descrição de consulta"  fullWidth multiline />
         </div>
     );
 }
-export default ScheduleDialog;
+export default ScheduleModal;

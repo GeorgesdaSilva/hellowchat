@@ -18,12 +18,13 @@ import { i18n } from "../../translate/i18n";
 import List from '@material-ui/core/List';
 
 import ListItemText from '@material-ui/core/ListItemText';
-
 import ContactModal from "../ContactModal";
 import ContactDrawerSkeleton from "../ContactDrawerSkeleton";
-import ScheduleDialog from "../ScheduleDialog/index"
+import ScheduleModal from "../ScheduleModal/index"
+import ScheduleCancelModal from "../ScheduleCancelModal/index"
 import { Grid } from "@material-ui/core";
 import Chip from '@material-ui/core/Chip';
+import ScheduledDetailsModal from "../ScheduleDetailsModal";
 const drawerWidth = 320;
 
 const useStyles = makeStyles(theme => ({
@@ -111,13 +112,27 @@ const ContactDrawer = ({ open, handleDrawerClose, contact, loading }) => {
 	const classes = useStyles();
 
 	const [modalOpen, setModalOpen] = useState(false);
-	const [scheduleDialog, setScheduleDialog] = useState(false);
+	const [scheduleModal, setScheduleModal] = useState(false);
 
-	const handleOpenScheduleDialog = () => {
-		setScheduleDialog(true)
+	const [scheduleCancelModal, setScheduleCancelModal] = useState(false);
+	const [scheduleDetailsModal, setScheduleDetailsModal] = useState(false);
+	const handleOpenScheduleModal = () => {
+		setScheduleModal(true)
 	}
-	const handleClosedScheduleDialog = () => {
-		setScheduleDialog(false)
+	const handleClosedScheduleModal = () => {
+		setScheduleModal(false)
+	}
+	const handleOpenScheduleCancelModal = () => {
+		setScheduleCancelModal(true)
+	}
+	const handleClosedScheduleCancelModal = () => {
+		setScheduleCancelModal(false)
+	}
+	const handleOpenScheduleDetailsModal = () => {
+		setScheduleDetailsModal(true)
+	}
+	const handleClosedScheduleDetailsModal = () => {
+		setScheduleDetailsModal(false)
 	}
 	return (
 		<Drawer
@@ -193,13 +208,13 @@ const ContactDrawer = ({ open, handleDrawerClose, contact, loading }) => {
 										variant="outlined"
 										color="primary"
 
-										onClick={() => handleOpenScheduleDialog()}
+										onClick={() => handleOpenScheduleModal()}
 									>
 										<AddAlarm />
 									</IconButton>
 								</Grid>
 
-								
+
 								<List >
 
 
@@ -208,11 +223,13 @@ const ContactDrawer = ({ open, handleDrawerClose, contact, loading }) => {
 
 
 											<ListItemText
+
+
 												style={{ padding: 3 }}
 												primary={
-													<div className={classes.schedulePrimary}>
+													<div className={classes.schedulePrimary} >
 														<Typography
-
+															onClick={() => handleOpenScheduleDetailsModal()}
 															component="span"
 															variant="subtitle2"
 															color="text.primary"
@@ -225,7 +242,7 @@ const ContactDrawer = ({ open, handleDrawerClose, contact, loading }) => {
 															variant="outlined"
 															color="primary"
 															style={{ padding: 0, margin: 0 }}
-															onClick={() => setModalOpen(true)}
+															onClick={() => handleOpenScheduleCancelModal()}
 														>
 															<DeleteSweep style={{ color: "#888E93" }} />
 														</IconButton>
@@ -234,7 +251,7 @@ const ContactDrawer = ({ open, handleDrawerClose, contact, loading }) => {
 												}
 
 												secondary={
-													<div className={classes.scheduleSecondary}>
+													<div className={classes.scheduleSecondary} onClick={() => handleOpenScheduleDetailsModal()}>
 														<Typography
 
 															component="span"
@@ -274,6 +291,7 @@ const ContactDrawer = ({ open, handleDrawerClose, contact, loading }) => {
 
 												}
 											/>
+
 										</Paper>
 									))}
 
@@ -297,8 +315,11 @@ const ContactDrawer = ({ open, handleDrawerClose, contact, loading }) => {
 
 				</div>
 			)}
-			<ScheduleDialog openStatus={scheduleDialog} handleClose={handleClosedScheduleDialog} handleOpen={handleOpenScheduleDialog} />
+			<ScheduleCancelModal openStatus={scheduleCancelModal} handleClose={handleClosedScheduleCancelModal} />
+			<ScheduleModal openStatus={scheduleModal} handleClose={handleClosedScheduleModal} />
+			<ScheduledDetailsModal openStatus={scheduleDetailsModal} handleClose={handleClosedScheduleDetailsModal} />
 		</Drawer>
+
 	);
 };
 
