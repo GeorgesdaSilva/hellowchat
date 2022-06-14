@@ -37,12 +37,16 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const ScheduleCancelModal = ({ handleClose, openStatus }) => {
+const ScheduleCancelModal = ({ handleClose, openStatus, id }) => {
     const classes = useStyles();
 
 
     const handleCloseModal = () => {
         handleClose();
+    }
+    const remove = () => {
+
+        alert(id)
     }
     return (
         <>
@@ -69,8 +73,8 @@ const ScheduleCancelModal = ({ handleClose, openStatus }) => {
                         </Typography>
                     </div>
                     <div className={classes.groupButtons}>
-                        <Button className={classes.buttonNotify} >  {i18n.t("scheduleCancelModal.groupButtons.yesNotify")} </Button>
-                        <Button className={classes.buttonNotNotify}>{i18n.t("scheduleCancelModal.groupButtons.notNotify")}</Button>
+                        <Button className={classes.buttonNotify} onClick={() => remove()}>  {i18n.t("scheduleCancelModal.groupButtons.yesNotify")} </Button>
+                        <Button className={classes.buttonNotNotify} onClick={() => remove()}>{i18n.t("scheduleCancelModal.groupButtons.notNotify")}</Button>
                     </div>
 
 

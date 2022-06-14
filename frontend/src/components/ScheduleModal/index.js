@@ -39,6 +39,7 @@ import { i18n } from "../../translate/i18n";
 
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
+
 const steps = ['Dados de Agendamento', 'Participantes'];
 
 const filter = createFilterOptions({
@@ -108,7 +109,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const ScheduleModal = ({ handleClose, openStatus }) => {
+const ScheduleModal = ({ handleClose, openStatus, id }) => {
     var err = {
         response: {
             data: {
@@ -118,6 +119,7 @@ const ScheduleModal = ({ handleClose, openStatus }) => {
 
     }
     const classes = useStyles();
+    const [scheduledId, setId] = React.useState();
     const [activeStep, setActiveStep] = React.useState(0);
     const [skipped, setSkipped] = React.useState(new Set());
     const [startDate, setStartDate] = React.useState(
@@ -145,6 +147,7 @@ const ScheduleModal = ({ handleClose, openStatus }) => {
     const [searchParam, setSearchParam] = React.useState('')
     const [loading, setLoading] = React.useState(false)
     const [searchModal, setSearchModal] = React.useState(false);
+
 
     const filterPassedTime = (time) => {
         const currentDate = new Date();
@@ -223,7 +226,6 @@ const ScheduleModal = ({ handleClose, openStatus }) => {
             setActiveStep((prevActiveStep) => prevActiveStep + 1);
             setSkipped(newSkipped);
         }
-
 
         var schedule = {
 
@@ -333,6 +335,13 @@ const ScheduleModal = ({ handleClose, openStatus }) => {
 
     }
     useEffect(() => {
+        if (id!==undefined) {
+            console.log(id)
+            setId(id)
+        } else {
+            console.log("nao tem id")
+        }
+
         const delayDebounceFn = setTimeout(() => {
             const fetchContacts = async () => {
                 try {
@@ -366,8 +375,9 @@ const ScheduleModal = ({ handleClose, openStatus }) => {
         }, 500);
         return () => clearTimeout(delayDebounceFn);
 
-    }, [searchParam])
+    }, [searchParam, id])
     const handleCloseModal = () => {
+        setId();
         setActiveStep(0);
         setSkipped(new Set());
         setStartDate(
@@ -376,6 +386,7 @@ const ScheduleModal = ({ handleClose, openStatus }) => {
         setEndDate(
             new Date()
         );
+
         setUsers([]);
         setAnfitriao([]);
         setParticipantes([]);
@@ -391,6 +402,7 @@ const ScheduleModal = ({ handleClose, openStatus }) => {
         setOpenContactModal(false)
         setOptions([]);
         setSearchParam('')
+
         handleClose()
     }
 
@@ -427,7 +439,7 @@ const ScheduleModal = ({ handleClose, openStatus }) => {
 
                             <Grid item xs={12} className={classes.gridRow}  >
                                 <Grid item xs={11} >
-                                    <Typography variant="subtitle1" ><strong>{i18n.t("scheduleModal.subtitles.title")}</strong></Typography>
+                                    <Typography variant="subtitle1" ><strong>{i18n.t("scheduleModal.subtitles.title")} </strong></Typography>
                                     <TextField InputProps={{ disableUnderline: true, className: classes.input }} defaultValue={topico} onChange={(e) => setTopico(e.target.value)} placeholder={i18n.t("scheduleModal.labels.topic")} fullWidth />
 
                                 </Grid>

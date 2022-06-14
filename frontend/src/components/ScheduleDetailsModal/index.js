@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Modal from '@material-ui/core/Modal';
 
 import { makeStyles } from "@material-ui/core/styles";
+import ScheduleModal from "../ScheduleModal/index";
 
 import Chip from '@material-ui/core/Chip';
 const useStyles = makeStyles(theme => ({
@@ -39,12 +40,23 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const ScheduledDetailsModal = ({ handleClose, openStatus }) => {
+const ScheduledDetailsModal = ({ handleClose, openStatus, id }) => {
     const classes = useStyles();
+    const [scheduleModal, setScheduleModal] = useState(false);
+
     const handleCloseModal = () => {
         handleClose();
     }
+    const handleOpenScheduleModal = () => {
 
+        handleClose();
+
+        setScheduleModal(true)
+    }
+    const handleClosedScheduleModal = () => {
+        setScheduleModal(false)
+
+    }
     return (
         <div>
             <Modal
@@ -91,7 +103,7 @@ const ScheduledDetailsModal = ({ handleClose, openStatus }) => {
                             <Typography variant="subtitle1" ><strong>Participantes:</strong> </Typography>
                             <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap" }}>
                                 {[1, 2, 3, 4, 5, 6, 7, 8, 9,].map(() => {
-                                 return   <Chip className={classes.chip} label="teste" />
+                                    return <Chip className={classes.chip} label="teste" />
                                 })
 
                                 }
@@ -112,11 +124,12 @@ const ScheduledDetailsModal = ({ handleClose, openStatus }) => {
                         </div>
                         <div style={{ display: "flex", justifyContent: "center", alignContent: "center" }}>
 
-                            <Button className={classes.button}>Editar agendamento</Button>
+                            <Button onClick={() => handleOpenScheduleModal()} className={classes.button}>Editar agendamento</Button>
                         </div>
                     </div>
                 </div>
             </Modal>
+            <ScheduleModal openStatus={scheduleModal} handleClose={handleClosedScheduleModal} id={id} />
         </div>
     );
 }

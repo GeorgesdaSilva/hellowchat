@@ -23,6 +23,7 @@
     "qrcode.react": "^1.0.0",
     "react": "^16.14.0",
     "react-bootstrap-icons": "^1.8.2",
+    "react-calendar": "^3.7.0",
     "react-chartjs-2": "^4.1.0",
     "react-color": "^2.19.3",
     "react-datepicker": "^4.8.0",

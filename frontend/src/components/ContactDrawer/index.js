@@ -11,20 +11,22 @@ import Avatar from "@material-ui/core/Avatar";
 
 import Paper from "@material-ui/core/Paper";
 import Edit from '@material-ui/icons/Edit';
-import DeleteSweep from '@material-ui/icons/DeleteSweep';
+
 import AddAlarm from '@material-ui/icons/AddAlarm';
-import LocationOnIcon from '@material-ui/icons/LocationOn';
+
 import { i18n } from "../../translate/i18n";
 import List from '@material-ui/core/List';
 
-import ListItemText from '@material-ui/core/ListItemText';
+
 import ContactModal from "../ContactModal";
 import ContactDrawerSkeleton from "../ContactDrawerSkeleton";
-import ScheduleModal from "../ScheduleModal/index"
-import ScheduleCancelModal from "../ScheduleCancelModal/index"
-import { Grid } from "@material-ui/core";
-import Chip from '@material-ui/core/Chip';
+import ScheduleModal from "../ScheduleModal/index";
+import ScheduleCancelModal from "../ScheduleCancelModal/index";
 import ScheduledDetailsModal from "../ScheduleDetailsModal";
+import { Grid } from "@material-ui/core";
+
+import ScheduleItemCustom from "../ScheduleItemCustom";
+
 const drawerWidth = 320;
 
 const useStyles = makeStyles(theme => ({
@@ -97,14 +99,7 @@ const useStyles = makeStyles(theme => ({
 		justifyContent: "center", alignContent: "center", flexDirection: "column", display: "flex",
 		padding: 2
 	},
-	scheduleContainer: {
-		backgroundColor: "#F0F4F8", borderLeft: "5px solid #D4EADD"
-	},
-	schedulePrimary: {
-		display: "flex", flexDirection: "row", justifyContent: "space-between", alignContent: "center", padding: 2
-	}, scheduleSecondary: {
-		display: "flex", flexDirection: "column", justifyContent: "flex-start"
-	}
+
 
 }));
 
@@ -116,19 +111,26 @@ const ContactDrawer = ({ open, handleDrawerClose, contact, loading }) => {
 
 	const [scheduleCancelModal, setScheduleCancelModal] = useState(false);
 	const [scheduleDetailsModal, setScheduleDetailsModal] = useState(false);
+	const [scheduledId, setScheduledId] = useState();
+
 	const handleOpenScheduleModal = () => {
+		
 		setScheduleModal(true)
 	}
 	const handleClosedScheduleModal = () => {
 		setScheduleModal(false)
 	}
-	const handleOpenScheduleCancelModal = () => {
+	const handleOpenScheduleCancelModal = (id) => {
+
+		setScheduledId(id)
 		setScheduleCancelModal(true)
 	}
 	const handleClosedScheduleCancelModal = () => {
+
 		setScheduleCancelModal(false)
 	}
-	const handleOpenScheduleDetailsModal = () => {
+	const handleOpenScheduleDetailsModal = (id) => {
+		setScheduledId(id)
 		setScheduleDetailsModal(true)
 	}
 	const handleClosedScheduleDetailsModal = () => {
@@ -218,81 +220,8 @@ const ContactDrawer = ({ open, handleDrawerClose, contact, loading }) => {
 								<List >
 
 
-									{contact?.extraInfo?.map(info => (
-										<Paper elevation={0} className={classes.scheduleContainer}>
-
-
-											<ListItemText
-
-
-												style={{ padding: 3 }}
-												primary={
-													<div className={classes.schedulePrimary} >
-														<Typography
-															onClick={() => handleOpenScheduleDetailsModal()}
-															component="span"
-															variant="subtitle2"
-															color="text.primary"
-															style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignContent: "center", margin: 0, padding: 0 }}
-														>
-															meeting: {contact.name}
-														</Typography>
-														<IconButton
-															size="5"
-															variant="outlined"
-															color="primary"
-															style={{ padding: 0, margin: 0 }}
-															onClick={() => handleOpenScheduleCancelModal()}
-														>
-															<DeleteSweep style={{ color: "#888E93" }} />
-														</IconButton>
-
-													</div>
-												}
-
-												secondary={
-													<div className={classes.scheduleSecondary} onClick={() => handleOpenScheduleDetailsModal()}>
-														<Typography
-
-															component="span"
-															variant="caption"
-															color="text.primary"
-														>
-															30 Maio 2022 10:30 -11:00
-														</Typography>
-														<Typography
-
-															component="span"
-															variant="caption"
-															color="text.primary"
-														>
-															<LocationOnIcon style={{ fontSize: 13 }} />
-															Silicon Valley
-														</Typography>
-
-
-
-														<div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignContent: "center", padding: 2 }}>
-															<Typography
-																// sx={{ display: 'inline' }}
-																component="span"
-																variant="caption"
-																color="text.primary"
-															>
-																Responsável:  <strong>João Carlos</strong>
-															</Typography>
-															<Chip label="Confirmado" size="small" style={{ backgroundColor: "#D4EADD", color: "#64A57B" }} />
-
-														</div>
-
-
-													</div>
-
-
-												}
-											/>
-
-										</Paper>
+									{contact?.extraInfo?.map((info, i) => (
+										<ScheduleItemCustom openCancelModal={handleOpenScheduleCancelModal} openDetailsModal={handleOpenScheduleDetailsModal} id={i} />
 									))}
 
 
@@ -315,9 +244,10 @@ const ContactDrawer = ({ open, handleDrawerClose, contact, loading }) => {
 
 				</div>
 			)}
-			<ScheduleCancelModal openStatus={scheduleCancelModal} handleClose={handleClosedScheduleCancelModal} />
 			<ScheduleModal openStatus={scheduleModal} handleClose={handleClosedScheduleModal} />
-			<ScheduledDetailsModal openStatus={scheduleDetailsModal} handleClose={handleClosedScheduleDetailsModal} />
+			<ScheduleCancelModal openStatus={scheduleCancelModal} handleClose={handleClosedScheduleCancelModal} id={scheduledId} />
+
+			<ScheduledDetailsModal openStatus={scheduleDetailsModal} handleClose={handleClosedScheduleDetailsModal} id={scheduledId}  />
 		</Drawer>
 
 	);
