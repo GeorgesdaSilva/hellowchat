@@ -109,7 +109,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const ScheduleModal = ({ handleClose, openStatus, id }) => {
+const ScheduleModal = ({ handleClose, openStatus, value,callback }) => {
     var err = {
         response: {
             data: {
@@ -119,7 +119,7 @@ const ScheduleModal = ({ handleClose, openStatus, id }) => {
 
     }
     const classes = useStyles();
-    const [scheduledId, setId] = React.useState();
+    const [scheduled, setScheduled] = React.useState();
     const [activeStep, setActiveStep] = React.useState(0);
     const [skipped, setSkipped] = React.useState(new Set());
     const [startDate, setStartDate] = React.useState(
@@ -210,7 +210,7 @@ const ScheduleModal = ({ handleClose, openStatus, id }) => {
     };
 
 
-    const saveSchedule = () => {
+    const saveSchedule =async () => {
         let newSkipped = skipped;
 
         if (anfitriao.length <= 0) {
@@ -244,8 +244,23 @@ const ScheduleModal = ({ handleClose, openStatus, id }) => {
             'notificationType': notificationType,
             'datesNotify': datesNotify,
         }
-
-        console.log(schedule)
+        
+            try {
+                await api.post("scheduled", {
+                    params: schedule,
+                });
+             
+                callback();
+                console.log(schedule)
+                handleClose();
+              
+            } catch (err) {
+               
+                toastError(err);
+            }
+      
+      
+        
     };
 
 
@@ -335,9 +350,9 @@ const ScheduleModal = ({ handleClose, openStatus, id }) => {
 
     }
     useEffect(() => {
-        if (id!==undefined) {
-            console.log(id)
-            setId(id)
+        if (value!==undefined) {
+            console.log(value)
+            setScheduled(value)
         } else {
             console.log("nao tem id")
         }
@@ -375,9 +390,9 @@ const ScheduleModal = ({ handleClose, openStatus, id }) => {
         }, 500);
         return () => clearTimeout(delayDebounceFn);
 
-    }, [searchParam, id])
+    }, [searchParam,value])
     const handleCloseModal = () => {
-        setId();
+        setScheduled({});
         setActiveStep(0);
         setSkipped(new Set());
         setStartDate(

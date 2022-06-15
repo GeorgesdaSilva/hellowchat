@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
         display: "flex", flexDirection: "column", justifyContent: "flex-start"
     }
 }))
-const ScheduleItemCustom = ({ openDetailsModal, openCancelModal, id }) => {
+const ScheduleItemCustom = ({ openDetailsModal, openCancelModal, scheduled }) => {
     const classes = useStyles();
 
 
@@ -32,7 +32,7 @@ const ScheduleItemCustom = ({ openDetailsModal, openCancelModal, id }) => {
                 primary={
                     <div className={classes.schedulePrimary} >
                         <Typography
-                            onClick={() => openDetailsModal(id)}
+                            onClick={() => openDetailsModal(scheduled)}
                             component="span"
                             variant="subtitle2"
                             color="text.primary"
@@ -45,7 +45,7 @@ const ScheduleItemCustom = ({ openDetailsModal, openCancelModal, id }) => {
                             variant="outlined"
                             color="primary"
                             style={{ padding: 0, margin: 0 }}
-                            onClick={() => openCancelModal(id)}
+                            onClick={() => openCancelModal(scheduled)}
                         >
                             <DeleteSweep style={{ color: "#888E93" }} />
                         </IconButton>
@@ -54,7 +54,7 @@ const ScheduleItemCustom = ({ openDetailsModal, openCancelModal, id }) => {
                 }
 
                 secondary={
-                    <div className={classes.scheduleSecondary} onClick={() => openDetailsModal(id)}>
+                    <div className={classes.scheduleSecondary} onClick={() => openDetailsModal(scheduled)}>
                         <Typography
 
                             component="span"

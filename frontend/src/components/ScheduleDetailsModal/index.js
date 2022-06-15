@@ -40,10 +40,10 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const ScheduledDetailsModal = ({ handleClose, openStatus, id }) => {
+const ScheduledDetailsModal = ({ handleClose, openStatus, value,callback }) => {
     const classes = useStyles();
     const [scheduleModal, setScheduleModal] = useState(false);
-
+    
     const handleCloseModal = () => {
         handleClose();
     }
@@ -57,6 +57,7 @@ const ScheduledDetailsModal = ({ handleClose, openStatus, id }) => {
         setScheduleModal(false)
 
     }
+
     return (
         <div>
             <Modal
@@ -129,7 +130,7 @@ const ScheduledDetailsModal = ({ handleClose, openStatus, id }) => {
                     </div>
                 </div>
             </Modal>
-            <ScheduleModal openStatus={scheduleModal} handleClose={handleClosedScheduleModal} id={id} />
+            <ScheduleModal openStatus={scheduleModal} handleClose={handleClosedScheduleModal} value={value} callback={callback}/>
         </div>
     );
 }

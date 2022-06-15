@@ -63,7 +63,7 @@ const Scheduled = () => {
     const [scheduleCancelModal, setScheduleCancelModal] = useState(false);
     const [scheduleDetailsModal, setScheduleDetailsModal] = useState(false);
     const [search, setSearch] = useState("");
-    const [scheduledId, setScheduledId] = useState();
+    const [scheduled, setScheduled] = useState({});
     const handleOpenScheduleModal = () => {
 
         setScheduleModal(true)
@@ -71,19 +71,23 @@ const Scheduled = () => {
     const handleClosedScheduleModal = () => {
         setScheduleModal(false)
     }
-    const handleOpenScheduleCancelModal = (id) => {
-        setScheduledId(id)
+    const handleOpenScheduleCancelModal = (scheduled) => {
+        setScheduled(scheduled)
         setScheduleCancelModal(true)
     }
     const handleClosedScheduleCancelModal = () => {
         setScheduleCancelModal(false)
     }
-    const handleOpenScheduleDetailsModal = (id) => {
-        setScheduledId(id)
+    const handleOpenScheduleDetailsModal = (scheduled) => {
+        setScheduled(scheduled)
         setScheduleDetailsModal(true)
     }
     const handleClosedScheduleDetailsModal = () => {
         setScheduleDetailsModal(false)
+    }
+
+    const loadScheduleds=()=>{
+        alert("carregando agendamentos novamente")
     }
     return (
         <Grid container justifyContent='space-around' className={classes.container}>
@@ -108,9 +112,9 @@ const Scheduled = () => {
                     </IconButton>
                 </div>
                 {true ? <List className={classes.list}>
-                    <ScheduleItemCustom openCancelModal={handleOpenScheduleCancelModal} openDetailsModal={handleOpenScheduleDetailsModal} id={1}/>
-                    <ScheduleItemCustom openCancelModal={handleOpenScheduleCancelModal} openDetailsModal={handleOpenScheduleDetailsModal} id={2}/>
-                    <ScheduleItemCustom openCancelModal={handleOpenScheduleCancelModal} openDetailsModal={handleOpenScheduleDetailsModal} id={3}/>
+                    <ScheduleItemCustom openCancelModal={handleOpenScheduleCancelModal} openDetailsModal={handleOpenScheduleDetailsModal} scheduled={{id:1}}/>
+                    <ScheduleItemCustom openCancelModal={handleOpenScheduleCancelModal} openDetailsModal={handleOpenScheduleDetailsModal} scheduled={{id:2}}/>
+                    <ScheduleItemCustom openCancelModal={handleOpenScheduleCancelModal} openDetailsModal={handleOpenScheduleDetailsModal} scheduled={{id:3}}/>
                    
 
                 </List> : <Typography variant="subtitle1" align='center' className={classes.scheduleEmpty}>Não há agendamentos para hoje.</Typography>
@@ -120,9 +124,9 @@ const Scheduled = () => {
 
 
             </Grid>
-            <ScheduleCancelModal openStatus={scheduleCancelModal} handleClose={handleClosedScheduleCancelModal} id={scheduledId}/>
-            <ScheduleModal openStatus={scheduleModal} handleClose={handleClosedScheduleModal} />
-            <ScheduledDetailsModal openStatus={scheduleDetailsModal} handleClose={handleClosedScheduleDetailsModal} id={scheduledId} />
+            <ScheduleCancelModal openStatus={scheduleCancelModal} handleClose={handleClosedScheduleCancelModal} value={scheduled} callback={loadScheduleds}/>
+            <ScheduleModal openStatus={scheduleModal} handleClose={handleClosedScheduleModal} callback={loadScheduleds} />
+            <ScheduledDetailsModal openStatus={scheduleDetailsModal} handleClose={handleClosedScheduleDetailsModal} value={scheduled} callback={loadScheduleds}/>
         </Grid>
     )
 }

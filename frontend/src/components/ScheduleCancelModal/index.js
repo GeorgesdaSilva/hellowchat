@@ -6,6 +6,8 @@ import Typography from "@material-ui/core/Typography/Typography";
 import Button from "@material-ui/core/Button/Button";
 import IconButton from '@material-ui/core/IconButton/IconButton';
 import { i18n } from "../../translate/i18n";
+import api from "../../services/api";
+import toastError from "../../errors/toastError";
 const useStyles = makeStyles(theme => ({
     modal: {
         display: "flex", justifyContent: "center", alignContent: "center", alignItems: "center", flexDirection: "column"
@@ -37,16 +39,29 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const ScheduleCancelModal = ({ handleClose, openStatus, id }) => {
+const ScheduleCancelModal = ({ handleClose, openStatus, value, callback }) => {
     const classes = useStyles();
 
 
     const handleCloseModal = () => {
         handleClose();
     }
-    const remove = () => {
+    const remove = async () => {
+        try {
+            await api.delete(`scheduled/${value.id}`);
 
-        alert(id)
+            callback()
+            handleClose();
+
+
+        } catch (err) {
+
+            toastError(err);
+        }
+
+
+
+
     }
     return (
         <>

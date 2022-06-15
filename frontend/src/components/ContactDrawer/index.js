@@ -111,7 +111,7 @@ const ContactDrawer = ({ open, handleDrawerClose, contact, loading }) => {
 
 	const [scheduleCancelModal, setScheduleCancelModal] = useState(false);
 	const [scheduleDetailsModal, setScheduleDetailsModal] = useState(false);
-	const [scheduledId, setScheduledId] = useState();
+	const [scheduled, setScheduled] = useState({});
 
 	const handleOpenScheduleModal = () => {
 		
@@ -120,22 +120,25 @@ const ContactDrawer = ({ open, handleDrawerClose, contact, loading }) => {
 	const handleClosedScheduleModal = () => {
 		setScheduleModal(false)
 	}
-	const handleOpenScheduleCancelModal = (id) => {
+	const handleOpenScheduleCancelModal = (value) => {
 
-		setScheduledId(id)
+		setScheduled(value)
 		setScheduleCancelModal(true)
 	}
 	const handleClosedScheduleCancelModal = () => {
 
 		setScheduleCancelModal(false)
 	}
-	const handleOpenScheduleDetailsModal = (id) => {
-		setScheduledId(id)
+	const handleOpenScheduleDetailsModal = (value) => {
+		setScheduled(value)
 		setScheduleDetailsModal(true)
 	}
 	const handleClosedScheduleDetailsModal = () => {
 		setScheduleDetailsModal(false)
 	}
+	const loadScheduleds=()=>{
+        alert("carregando agendamentos novamente")
+    }
 	return (
 		<Drawer
 			className={classes.drawer}
@@ -221,7 +224,7 @@ const ContactDrawer = ({ open, handleDrawerClose, contact, loading }) => {
 
 
 									{contact?.extraInfo?.map((info, i) => (
-										<ScheduleItemCustom openCancelModal={handleOpenScheduleCancelModal} openDetailsModal={handleOpenScheduleDetailsModal} id={i} />
+										<ScheduleItemCustom openCancelModal={handleOpenScheduleCancelModal} openDetailsModal={handleOpenScheduleDetailsModal} scheduled={{id:i}} />
 									))}
 
 
@@ -244,10 +247,10 @@ const ContactDrawer = ({ open, handleDrawerClose, contact, loading }) => {
 
 				</div>
 			)}
-			<ScheduleModal openStatus={scheduleModal} handleClose={handleClosedScheduleModal} />
-			<ScheduleCancelModal openStatus={scheduleCancelModal} handleClose={handleClosedScheduleCancelModal} id={scheduledId} />
+			<ScheduleModal openStatus={scheduleModal} handleClose={handleClosedScheduleModal} callback={loadScheduleds}/>
+			<ScheduleCancelModal openStatus={scheduleCancelModal} handleClose={handleClosedScheduleCancelModal} value={scheduled} callback={loadScheduleds}/>
 
-			<ScheduledDetailsModal openStatus={scheduleDetailsModal} handleClose={handleClosedScheduleDetailsModal} id={scheduledId}  />
+			<ScheduledDetailsModal openStatus={scheduleDetailsModal} handleClose={handleClosedScheduleDetailsModal} value={scheduled}  callback={loadScheduleds}/>
 		</Drawer>
 
 	);
