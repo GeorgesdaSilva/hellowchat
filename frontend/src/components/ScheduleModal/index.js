@@ -18,7 +18,7 @@ import ArrowBack from '@material-ui/icons/ArrowBack';
 import AddAlertIcon from '@material-ui/icons/AddAlert';
 import Add from '@material-ui/icons/Add';
 import Search from '@material-ui/icons/Search';
-import DatePicker from "react-datepicker";
+import DatePicker, { registerLocale } from "react-datepicker";
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
@@ -36,10 +36,11 @@ import Autocomplete, {
 } from "@material-ui/lab/Autocomplete";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { i18n } from "../../translate/i18n";
+import ptBR from "date-fns/locale/pt-BR";
 
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
-
+registerLocale("pt-br", ptBR);
 const steps = ['Dados de Agendamento', 'Participantes'];
 
 const filter = createFilterOptions({
@@ -109,7 +110,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const ScheduleModal = ({ handleClose, openStatus, value,callback }) => {
+const ScheduleModal = ({ handleClose, openStatus, value, callback }) => {
     var err = {
         response: {
             data: {
@@ -210,7 +211,7 @@ const ScheduleModal = ({ handleClose, openStatus, value,callback }) => {
     };
 
 
-    const saveSchedule =async () => {
+    const saveSchedule = async () => {
         let newSkipped = skipped;
 
         if (anfitriao.length <= 0) {
@@ -227,40 +228,54 @@ const ScheduleModal = ({ handleClose, openStatus, value,callback }) => {
             setSkipped(newSkipped);
         }
 
-        var schedule = {
+        var scheduled = {
 
 
-            'startdate': startDate,
+            'startDate': startDate,
             'endDate': endDate,
-            'externos': users,
-            'anfitriao': anfitriao,
-            'participantes': participantes,
-            'topico': topico,
+            'externals': users,
+            'anfitriao': anfitriao[0],
+            'attendants': participantes,
+            'title': topico,
             'locale': locale,
             'description': description,
             'typeEvent': typeEvent,
-            'recorrencia': recorrencia,
-            'nivel': level,
+            'recorrency': recorrencia,
+            'level': level,
             'notificationType': notificationType,
             'datesNotify': datesNotify,
         }
-        
+        console.log(scheduled)
+
+        if (value?.id) {
             try {
-                await api.post("scheduled", {
-                    params: schedule,
-                });
-             
+                await api.put(`scheduleds/${value.id}`, scheduled);
+
                 callback();
-                console.log(schedule)
+
                 handleClose();
-              
+
             } catch (err) {
-               
+
                 toastError(err);
             }
-      
-      
-        
+        } else {
+            try {
+                await api.post("scheduleds", scheduled);
+
+                callback();
+
+                handleClose();
+
+            } catch (err) {
+
+                toastError(err);
+            }
+        }
+
+
+
+
     };
 
 
@@ -310,7 +325,7 @@ const ScheduleModal = ({ handleClose, openStatus, value,callback }) => {
         } = event;
         setParticipantes(
 
-            typeof value === 'string' ? value.split(',') : value,
+            value,
         );
     };
     const handleChangeAnfitriao = (event) => {
@@ -350,11 +365,28 @@ const ScheduleModal = ({ handleClose, openStatus, value,callback }) => {
 
     }
     useEffect(() => {
-        if (value!==undefined) {
-            console.log(value)
-            setScheduled(value)
-        } else {
-            console.log("nao tem id")
+        if (value !== undefined) {
+            setScheduled(value);
+            setStartDate(
+                new Date(value.startDate))
+            setEndDate(
+                new Date(value.endDate)
+            );
+
+            setUsers(value.externals);
+            setAnfitriao([value.anfitriao]);
+            setParticipantes(value.attendants);
+            setTopico(value.title);
+            setLocale(value.locale);
+            setDescription(value.description);
+            setTypeEvent(value.typeEvent);
+            setRecorrencia(value.recorrency);
+            setLevel(value.level);
+            setNotificationType(value.notificationType);
+            setNotifyDate(new Date(value.startDate));
+            setDatesNotify(value.datesNotify);
+
+
         }
 
         const delayDebounceFn = setTimeout(() => {
@@ -390,7 +422,7 @@ const ScheduleModal = ({ handleClose, openStatus, value,callback }) => {
         }, 500);
         return () => clearTimeout(delayDebounceFn);
 
-    }, [searchParam,value])
+    }, [searchParam, value])
     const handleCloseModal = () => {
         setScheduled({});
         setActiveStep(0);

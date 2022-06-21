@@ -40,10 +40,10 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const ScheduledDetailsModal = ({ handleClose, openStatus, value,callback }) => {
+const ScheduledDetailsModal = ({ handleClose, openStatus, value, callback }) => {
     const classes = useStyles();
     const [scheduleModal, setScheduleModal] = useState(false);
-    
+
     const handleCloseModal = () => {
         handleClose();
     }
@@ -58,6 +58,23 @@ const ScheduledDetailsModal = ({ handleClose, openStatus, value,callback }) => {
 
     }
 
+    const parseInitialDate = (date) => {
+        var currentdate = date;
+        var datetime = currentdate.getDate() + "/"
+            + (currentdate.getMonth() + 1) + "/"
+            + currentdate.getFullYear() + " "
+            + currentdate.getHours() + ":"
+            + currentdate.getMinutes() + " ";
+
+        return datetime;
+    }
+    const parseEndDate = (date) => {
+        var currentdate = date;
+        var datetime = currentdate.getHours() + ":"
+            + currentdate.getMinutes();
+
+        return datetime;
+    }
     return (
         <div>
             <Modal
@@ -74,38 +91,48 @@ const ScheduledDetailsModal = ({ handleClose, openStatus, value,callback }) => {
 
                         <div className={classes.row}>
 
-                            <Typography variant="subtitle1" ><strong>Título:</strong>  Apresentação de sistema</Typography>
+                            <Typography variant="subtitle1" ><strong>Título:</strong>  {value?.title}</Typography>
                         </div>
                         <div className={classes.row}>
 
-                            <Typography variant="subtitle1" ><strong>Anfitrião:</strong>  Luan Rodrigues</Typography>
+                            <Typography variant="subtitle1" ><strong>Anfitrião:</strong> {value?.anfitriao?.name}</Typography>
                         </div>
                         <div className={classes.row}>
 
-                            <Typography variant="subtitle1" ><strong>Data:</strong>  17/06/2022 12:10 - 17/06/2022 12:40</Typography>
+                            <Typography variant="subtitle1" ><strong>Data:</strong>    {
+
+                                parseInitialDate(new Date(value.startDate))
+                            }
+                                -
+                                {parseEndDate(new Date(value.endDate))}</Typography>
                         </div>
                         <div className={classes.row}>
 
-                            <Typography variant="subtitle1" style={{ marginRight: 10 }} ><strong>Recorrência:</strong>  Apenas uma vez</Typography><Typography variant="subtitle1" ><strong>Prioridade:</strong>  Alta</Typography>
+                            <Typography variant="subtitle1" style={{ marginRight: 10 }} ><strong>Recorrência:</strong>  {value?.recorrency === 1 ? "Apenas uma vez" : value.recorrency === 2 ? "Semanalmente" : "Mensalmente"}</Typography><Typography variant="subtitle1" ><strong>Prioridade:</strong>  {value.level === 1 ? "Baixa" : value.level === 2 ? "Média" : "Alta"}</Typography>
                         </div>
                         <div className={classes.row}>
 
-                            <Typography variant="subtitle1" ><strong>Local:</strong>  online - Google Meet</Typography>
+                            <Typography variant="subtitle1" ><strong>Local:</strong>  {value?.typeEvent === 1 ? "Local" : "Online"} - {value?.locale}</Typography>
                         </div>
                         <div className={classes.row}>
 
-                            <Typography variant="subtitle1" ><strong>Descrição:</strong>  Lorem ipsum dolor sit amet. At temp
-                                ore soluta At animi nostrum nam dolorum dicta.
-                                Non ducimus provident et facere fugiat est iure
-                                dolorem. Ut sequi mollitia a explicabo natus e </Typography>
+                            <Typography variant="subtitle1" ><strong>Descrição:</strong>  {value?.description} </Typography>
                         </div>
                         <div >
 
                             <Typography variant="subtitle1" ><strong>Participantes:</strong> </Typography>
                             <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap" }}>
-                                {[1, 2, 3, 4, 5, 6, 7, 8, 9,].map(() => {
-                                    return <Chip className={classes.chip} label="teste" />
-                                })
+                                {value?.externals ? value.externals.map((e) => {
+                                    return <Chip className={classes.chip} label={e.name} key={e.id} />
+                                }) : null
+
+
+                                }
+
+                                {value?.attendants ? value?.attendants.map((e) => {
+                                    return <Chip className={classes.chip} label={e.name} key={e.id} />
+                                }) : null
+
 
                                 }
 
@@ -114,11 +141,11 @@ const ScheduledDetailsModal = ({ handleClose, openStatus, value,callback }) => {
                         </div>
                         <div >
 
-                            <Typography variant="subtitle1" ><strong>Notificação:</strong> whatsapp - Email</Typography>
+                            <Typography variant="subtitle1" ><strong>Notificação:</strong> {value?.notificationType?.includes(1) ? " Whatsapp " : ""}{value?.notificationType?.includes(2) ? " Email " : ""} </Typography>
                             <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap" }}>
-                                {[1, 2, 3, 4, 5, 6].map(() => {
-                                    return <Chip className={classes.chip} label="17/06/2022 13:50" />
-                                })
+                                {value?.datesNotify ? value.datesNotify.map((e, i) => {
+                                    return <Chip className={classes.chip} label={parseInitialDate(new Date(e))} key={i} />
+                                }) : null
                                 }
                             </div>
 
@@ -130,7 +157,7 @@ const ScheduledDetailsModal = ({ handleClose, openStatus, value,callback }) => {
                     </div>
                 </div>
             </Modal>
-            <ScheduleModal openStatus={scheduleModal} handleClose={handleClosedScheduleModal} value={value} callback={callback}/>
+            <ScheduleModal openStatus={scheduleModal} handleClose={handleClosedScheduleModal} value={value} callback={callback} />
         </div>
     );
 }

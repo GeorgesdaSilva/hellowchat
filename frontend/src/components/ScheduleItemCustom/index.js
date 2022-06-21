@@ -23,6 +23,23 @@ const ScheduleItemCustom = ({ openDetailsModal, openCancelModal, scheduled }) =>
     const classes = useStyles();
 
 
+    const parseInitialDate = (date) => {
+        var currentdate = date;
+        var datetime = currentdate.getDate() + "/"
+            + (currentdate.getMonth() + 1) + "/"
+            + currentdate.getFullYear() + " "
+            + currentdate.getHours() + ":"
+            + currentdate.getMinutes() + " " ;
+          
+        return datetime;
+    }
+    const parseEndDate = (date) => {
+        var currentdate = date;
+        var datetime = currentdate.getHours() + ":"
+            + currentdate.getMinutes() ;
+           
+        return datetime;
+    }
     return (
         <Paper elevation={0} className={classes.scheduleContainer}>
             <ListItemText
@@ -38,7 +55,7 @@ const ScheduleItemCustom = ({ openDetailsModal, openCancelModal, scheduled }) =>
                             color="text.primary"
                             style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignContent: "center", margin: 0, padding: 0 }}
                         >
-                            meeting: Alex raul santo
+                            meeting: {scheduled.title}
                         </Typography>
                         <IconButton
                             size="5"
@@ -61,7 +78,12 @@ const ScheduleItemCustom = ({ openDetailsModal, openCancelModal, scheduled }) =>
                             variant="caption"
                             color="text.primary"
                         >
-                            30 Maio 2022 10:30 -11:00
+                            {
+
+                                parseInitialDate(new Date(scheduled.startDate))
+                            }
+                            -
+                            {parseEndDate(new Date(scheduled.endDate))}
                         </Typography>
                         <Typography
 
@@ -70,7 +92,7 @@ const ScheduleItemCustom = ({ openDetailsModal, openCancelModal, scheduled }) =>
                             color="text.primary"
                         >
                             <LocationOnIcon style={{ fontSize: 13 }} />
-                            Silicon Valley
+                            {scheduled.locale}
                         </Typography>
 
 
@@ -82,7 +104,7 @@ const ScheduleItemCustom = ({ openDetailsModal, openCancelModal, scheduled }) =>
                                 variant="caption"
                                 color="text.primary"
                             >
-                                Responsável:  <strong>João Carlos</strong>
+                                Responsável:  <strong>{scheduled?.anfitriao?.name}</strong>
                             </Typography>
                             <Chip label="Confirmado" size="small" style={{ backgroundColor: "#D4EADD", color: "#64A57B" }} />
 

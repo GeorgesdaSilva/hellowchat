@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Calendar from 'react-calendar';
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from '@material-ui/core/TextField'
@@ -8,7 +8,8 @@ import AddAlarm from '@material-ui/icons/AddAlarm';
 import IconButton from "@material-ui/core/IconButton";
 import List from "@material-ui/core/List";
 
-
+import api from "../../services/api";
+import toastError from "../../errors/toastError";
 import ScheduleModal from "../../components/ScheduleModal"
 import ScheduleCancelModal from "../../components/ScheduleCancelModal/index"
 import ScheduledDetailsModal from "../../components/ScheduleDetailsModal";
@@ -64,6 +65,7 @@ const Scheduled = () => {
     const [scheduleDetailsModal, setScheduleDetailsModal] = useState(false);
     const [search, setSearch] = useState("");
     const [scheduled, setScheduled] = useState({});
+    const [scheduleds, setScheduleds] = useState([]);
     const handleOpenScheduleModal = () => {
 
         setScheduleModal(true)
@@ -86,10 +88,25 @@ const Scheduled = () => {
         setScheduleDetailsModal(false)
     }
 
-    const loadScheduleds=()=>{
-        alert("carregando agendamentos novamente")
+    const loadScheduleds = async () => {
+
+        try {
+            const result = await api.get("scheduleds");
+
+            setScheduleds(result.data)
+
+        } catch (err) {
+
+            toastError(err);
+        }
     }
+
+    useEffect(() => {
+        loadScheduleds();
+    })
     return (
+
+
         <Grid container justifyContent='space-around' className={classes.container}>
             <Grid item lg={7} md={7} xs={12} style={{ borderRadius: 5, height: 400, }}>
 
@@ -98,7 +115,7 @@ const Scheduled = () => {
             </Grid>
             <Grid item lg={4} md={4} xs={12} className={classes.scheduleItemContainer}>
 
-                <TextField  value={search} onChange={(e) => setSearch(e.target.value)} fullWidth InputProps={{ disableUnderline: true, className: classes.input, startAdornment: <InputAdornment position="start"><IconButton><Search /></IconButton></InputAdornment>, endAdornment: <InputAdornment position="start"><IconButton onClick={() => setSearch('')}><CloseIcon /></IconButton></InputAdornment>, }} placeholder="Insira algo..." />
+                <TextField value={search} onChange={(e) => setSearch(e.target.value)} fullWidth InputProps={{ disableUnderline: true, className: classes.input, startAdornment: <InputAdornment position="start"><IconButton><Search /></IconButton></InputAdornment>, endAdornment: <InputAdornment position="start"><IconButton onClick={() => setSearch('')}><CloseIcon /></IconButton></InputAdornment>, }} placeholder="Insira algo..." />
                 <div className={classes.scheduleHeader}>
                     <Typography variant="h6" className={classes.titleSchedule}>Agendamentos</Typography><IconButton
                         size="10"
@@ -111,11 +128,12 @@ const Scheduled = () => {
                         <AddAlarm />
                     </IconButton>
                 </div>
-                {true ? <List className={classes.list}>
-                    <ScheduleItemCustom openCancelModal={handleOpenScheduleCancelModal} openDetailsModal={handleOpenScheduleDetailsModal} scheduled={{id:1}}/>
-                    <ScheduleItemCustom openCancelModal={handleOpenScheduleCancelModal} openDetailsModal={handleOpenScheduleDetailsModal} scheduled={{id:2}}/>
-                    <ScheduleItemCustom openCancelModal={handleOpenScheduleCancelModal} openDetailsModal={handleOpenScheduleDetailsModal} scheduled={{id:3}}/>
-                   
+                {scheduleds.length > 0 ? <List className={classes.list}>
+                    {scheduleds.map((scheduled) => {
+                        return <ScheduleItemCustom openCancelModal={handleOpenScheduleCancelModal} openDetailsModal={handleOpenScheduleDetailsModal} scheduled={scheduled} />
+                    })}
+
+
 
                 </List> : <Typography variant="subtitle1" align='center' className={classes.scheduleEmpty}>Não há agendamentos para hoje.</Typography>
 
@@ -124,9 +142,9 @@ const Scheduled = () => {
 
 
             </Grid>
-            <ScheduleCancelModal openStatus={scheduleCancelModal} handleClose={handleClosedScheduleCancelModal} value={scheduled} callback={loadScheduleds}/>
+            <ScheduleCancelModal openStatus={scheduleCancelModal} handleClose={handleClosedScheduleCancelModal} value={scheduled} callback={loadScheduleds} />
             <ScheduleModal openStatus={scheduleModal} handleClose={handleClosedScheduleModal} callback={loadScheduleds} />
-            <ScheduledDetailsModal openStatus={scheduleDetailsModal} handleClose={handleClosedScheduleDetailsModal} value={scheduled} callback={loadScheduleds}/>
+            <ScheduledDetailsModal openStatus={scheduleDetailsModal} handleClose={handleClosedScheduleDetailsModal} value={scheduled} callback={loadScheduleds} />
         </Grid>
     )
 }

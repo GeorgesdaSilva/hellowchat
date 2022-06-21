@@ -48,7 +48,7 @@ const ScheduleCancelModal = ({ handleClose, openStatus, value, callback }) => {
     }
     const remove = async () => {
         try {
-            await api.delete(`scheduled/${value.id}`);
+            await api.delete(`scheduleds/${value.id}`);
 
             callback()
             handleClose();
