@@ -309,8 +309,8 @@ const ScheduleModal = ({ handleClose, openStatus, value, callback }) => {
     const handleChangeUsers = (e, newValue) => {
 
 
-        if (newValue?.number) {
-            setUsers([...users, newValue.number])
+        if (newValue) {
+            setUsers([...users, newValue])
 
         } else {
             return;
@@ -325,7 +325,7 @@ const ScheduleModal = ({ handleClose, openStatus, value, callback }) => {
         } = event;
         setParticipantes(
 
-            value,
+            value
         );
     };
     const handleChangeAnfitriao = (event) => {
@@ -694,19 +694,19 @@ const ScheduleModal = ({ handleClose, openStatus, value, callback }) => {
                                             renderValue={(selected) => (
                                                 <Box sx={{ display: 'flex', gap: 0.5 }}>
                                                     {selected.map((value) => (
-                                                        <Chip key={value} label={value} />
+                                                        <Chip key={value.id} label={value.name} />
                                                     ))}
                                                 </Box>
                                             )}
 
                                         >
-                                            {users.map((number, i) => (
+                                            {options.map((value) => (
                                                 <MenuItem
-                                                    key={number}
-                                                    value={number}
+                                                    key={value.id}
+                                                    value={value}
 
                                                 >
-                                                    {number}
+                                                    {value.name}
                                                 </MenuItem>
                                             ))}
                                         </Select>

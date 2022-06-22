@@ -1,14 +1,18 @@
 
+
 import { Op } from "sequelize";
 import Contact from "../../models/Contact";
 import Ticket from "../../models/Ticket";
+
 import ShowTicketService from "./ShowTicketService";
 
 const FindOrCreateTicketService = async (
   contact: Contact,
   whatsappId: number,
   unreadMessages: number,
-  groupContact?: Contact
+  groupContact?: Contact,
+  isScheduled?: boolean,
+  
 ): Promise<Ticket> => {
   let ticket = await Ticket.findOne({
     where: {
@@ -20,21 +24,22 @@ const FindOrCreateTicketService = async (
     }
   });
   var durationDate = new Date();
-if(ticket?.status==="open"){
-  await ticket.update({ unreadMessages });
-}
+  if (ticket?.status === "open") {
+    await ticket.update({ unreadMessages });
+  }
 
 
 
 
-if(ticket?.status==="pending"){
-  await ticket.update({ unreadMessages });
-}
-  
+  if (ticket?.status === "pending") {
+    await ticket.update({ unreadMessages });
+  }
+
 
 
 
   if (!ticket && groupContact) {
+
     ticket = await Ticket.findOne({
       where: {
         contactId: groupContact.id,
@@ -77,10 +82,10 @@ if(ticket?.status==="pending"){
   if (!ticket) {
     ticket = await Ticket.create({
       contactId: groupContact ? groupContact.id : contact.id,
-      status: "pending",
+      status: isScheduled ? "closed" : "pending",
       isGroup: !!groupContact,
       unreadMessages,
-      whatsappId, durationDate: durationDate
+      whatsappId, durationDate: durationDate,
     });
   }
 
