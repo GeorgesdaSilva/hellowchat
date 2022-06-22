@@ -4,10 +4,10 @@ import Scheduled from "../../models/Scheduled";
 import { Op } from "sequelize";
 interface Request {
   date?: Date;
-
+  searchParams?:String;
   number?: string;
 }
-const ShowScheduleService = async ({ date, number }: Request): Promise<Array<Scheduled>> => {
+const ShowScheduleService = async ({ date, number,searchParams }: Request): Promise<Array<Scheduled>> => {
   var whereCondition;
   if (date) {
     date = new Date(new Date(date).toDateString());
@@ -22,6 +22,13 @@ const ShowScheduleService = async ({ date, number }: Request): Promise<Array<Sch
         [Op.lte]:
           end_date,
       },
+    };
+  }
+  if(searchParams){
+    whereCondition = {
+      title:{
+        [Op.like]:`%${searchParams}%`
+      }
     };
   }
   var scheduleds = await Scheduled.findAll({ where: whereCondition })

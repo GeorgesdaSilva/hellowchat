@@ -118,6 +118,7 @@ const Scheduled = () => {
             try {
                 const result = await api.post("scheduleds/search", {
                     date: date,
+                    searchParams:search
 
                 });
 
@@ -131,7 +132,7 @@ const Scheduled = () => {
         loadInitial()
 
 
-    }, [date])
+    }, [date,search])
     return (
 
 

@@ -12,10 +12,10 @@ import ListWhatsAppsService from "../services/WhatsappService/ListWhatsAppsServi
 
 export const show = async (req: Request, res: Response): Promise<Response> => {
 
-  const { date, number } = req.body;
+  const { date, number,searchParams } = req.body;
 
 
-  const scheduleds = await ShowScheduleService({date, number });
+  const scheduleds = await ShowScheduleService({date, number,searchParams });
 
   return res.status(200).json(scheduleds);
 };
