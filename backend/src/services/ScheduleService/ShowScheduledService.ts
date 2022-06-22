@@ -1,50 +1,43 @@
-import User from "../../models/User";
+
 import AppError from "../../errors/AppError";
-import Queue from "../../models/Queue";
-import Whatsapp from "../../models/Whatsapp";
 import Scheduled from "../../models/Scheduled";
-import Contact from "../../models/Contact";
-import ShowUserService from "../UserServices/ShowUserService";
-import GetContactService from "../ContactServices/GetContactService";
-import { Sequelize, Op } from "sequelize";
-import { query } from "express";
-import sequelize from "../../database";
-import { parseJSON } from "date-fns";
+import { Op } from "sequelize";
 interface Request {
-  startDate: Date;
-  endDate: Date;
+  date?: Date;
+
   number?: string;
 }
-const ShowScheduleService = async ({ startDate, endDate, number }: Request): Promise<Array<Scheduled>> => {
-
+const ShowScheduleService = async ({ date, number }: Request): Promise<Array<Scheduled>> => {
   var whereCondition;
-  if (startDate && endDate) {
+  if (date) {
+    date = new Date(new Date(date).toDateString());
+    const initial = new Date(date.getFullYear(), date.getMonth(), date.getDate()).setUTCHours(0,0,0,0);
+    const start_date= new Date(initial)
+    const end = new Date(date.getFullYear(), date.getMonth(), date.getDate()).setUTCHours(23,59,59,999);
+    const end_date= new Date(end)
     whereCondition = {
-      startDate: startDate,
-      endDate: endDate,
-
+      startDate: {
+        [Op.gt]:
+          start_date,
+        [Op.lte]:
+          end_date,
+      },
     };
-
   }
-
-
-
-
   var scheduleds = await Scheduled.findAll({ where: whereCondition })
   if (!scheduleds) {
     throw new AppError('NOT_FOUND_SCHEDULEDS');
   }
-
+  //criar nova query para melhorar o desempenho
   if (number) {
     scheduleds = scheduleds.filter(function (element) {
       return element.externals.some(function (subElement) {
+
         return subElement.number === number
       });
     });
 
   }
-
-
   return scheduleds;
 };
 

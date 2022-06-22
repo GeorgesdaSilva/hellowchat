@@ -120,7 +120,6 @@ const ScheduleModal = ({ handleClose, openStatus, value, callback }) => {
 
     }
     const classes = useStyles();
-    const [scheduled, setScheduled] = React.useState();
     const [activeStep, setActiveStep] = React.useState(0);
     const [skipped, setSkipped] = React.useState(new Set());
     const [startDate, setStartDate] = React.useState(
@@ -366,7 +365,7 @@ const ScheduleModal = ({ handleClose, openStatus, value, callback }) => {
     }
     useEffect(() => {
         if (value !== undefined) {
-            setScheduled(value);
+        
             setStartDate(
                 new Date(value.startDate))
             setEndDate(
@@ -424,7 +423,7 @@ const ScheduleModal = ({ handleClose, openStatus, value, callback }) => {
 
     }, [searchParam, value])
     const handleCloseModal = () => {
-        setScheduled({});
+       
         setActiveStep(0);
         setSkipped(new Set());
         setStartDate(
@@ -473,7 +472,7 @@ const ScheduleModal = ({ handleClose, openStatus, value, callback }) => {
                                 stepProps.completed = false;
                             }
                             return (
-                                <Step key={label} {...stepProps}>
+                                <Step key={index} {...stepProps}>
                                     <StepLabel {...labelProps}>{label}</StepLabel>
 
                                 </Step>
@@ -811,18 +810,20 @@ const ScheduleModal = ({ handleClose, openStatus, value, callback }) => {
 
                                             }}>
 
-                                                {datesNotify.map((value, i) => (
+                                                {datesNotify.map((value) => 
+                                                    <div  key={value.id}>
                                                     <ListItem
-                                                        key={i}
+                                                       
                                                         disableGutters
                                                         style={{ display: "flex", flexDirection: "row", justifyContent: "space-around", alignContent: "center", height: "100%", padding: 0, margin: 0 }}
                                                     >
 
-                                                        <Typography variant="caption">{` ${new Date(value).toLocaleString('pt-br')}`}</Typography>
-                                                        <IconButton aria-label="comment" style={{ color: "grey", height: "100%" }} onClick={() => removeDateNotify(value)}>
+                                                        <Typography     variant="caption">{` ${new Date(value).toLocaleString('pt-br')}`}</Typography>
+                                                        <IconButton     aria-label="comment" style={{ color: "grey", height: "100%" }} onClick={() => removeDateNotify(value)}>
                                                             <DeleteForeverIcon />
                                                         </IconButton></ListItem>
-                                                ))}
+                                                        </div>
+                                                )}
                                             </List>
 
                                         </Grid>

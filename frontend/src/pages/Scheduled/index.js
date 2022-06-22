@@ -57,7 +57,7 @@ const useStyles = makeStyles(theme => ({
 }))
 const Scheduled = () => {
     const classes = useStyles();
-    const [value, onChange] = useState(new Date());
+    const [date, onChange] = useState(new Date());
 
     const [scheduleModal, setScheduleModal] = useState(false);
 
@@ -91,7 +91,10 @@ const Scheduled = () => {
     const loadScheduleds = async () => {
 
         try {
-            const result = await api.get("scheduleds");
+            const result = await api.post("scheduleds/search", {
+                date: date,
+
+            });
 
             setScheduleds(result.data)
 
@@ -101,16 +104,41 @@ const Scheduled = () => {
         }
     }
 
+
+    const searchBydate = (e) => {
+
+        onChange(e)
+
+    }
+
+
     useEffect(() => {
-        loadScheduleds();
-    })
+        const loadInitial = async () => {
+
+            try {
+                const result = await api.post("scheduleds/search", {
+                    date: date,
+
+                });
+
+                setScheduleds(result.data)
+
+            } catch (err) {
+
+                toastError(err);
+            }
+        }
+        loadInitial()
+
+
+    }, [date])
     return (
 
 
         <Grid container justifyContent='space-around' className={classes.container}>
             <Grid item lg={7} md={7} xs={12} style={{ borderRadius: 5, height: 400, }}>
 
-                <Calendar onChange={onChange} value={value} className={classes.calendar} />
+                <Calendar onChange={(e) => { searchBydate(e) }} value={date} className={classes.calendar} />
 
             </Grid>
             <Grid item lg={4} md={4} xs={12} className={classes.scheduleItemContainer}>
@@ -130,7 +158,7 @@ const Scheduled = () => {
                 </div>
                 {scheduleds.length > 0 ? <List className={classes.list}>
                     {scheduleds.map((scheduled) => {
-                        return <ScheduleItemCustom openCancelModal={handleOpenScheduleCancelModal} openDetailsModal={handleOpenScheduleDetailsModal} scheduled={scheduled} />
+                        return <ScheduleItemCustom openCancelModal={handleOpenScheduleCancelModal} openDetailsModal={handleOpenScheduleDetailsModal} scheduled={scheduled} key={scheduled.id} />
                     })}
 
 

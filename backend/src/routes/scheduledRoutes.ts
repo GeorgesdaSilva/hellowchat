@@ -5,7 +5,7 @@ import isAuth from "../middleware/isAuth";
 
 const scheduledRoutes = Router();
 
-scheduledRoutes.get("/scheduleds", isAuth,ScheduledController.show);
+scheduledRoutes.post("/scheduleds/search", isAuth,ScheduledController.show);
 scheduledRoutes.get("/scheduleds/:id", isAuth,ScheduledController.details);
 scheduledRoutes.post("/scheduleds",isAuth, ScheduledController.store);
 scheduledRoutes.put("/scheduleds/:id",isAuth, ScheduledController.update);

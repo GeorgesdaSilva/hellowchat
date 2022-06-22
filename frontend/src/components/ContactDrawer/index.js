@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
@@ -6,7 +6,8 @@ import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import Drawer from "@material-ui/core/Drawer";
 import Link from "@material-ui/core/Link";
-
+import api from "../../services/api";
+import toastError from "../../errors/toastError";
 import Avatar from "@material-ui/core/Avatar";
 
 import Paper from "@material-ui/core/Paper";
@@ -108,13 +109,12 @@ const ContactDrawer = ({ open, handleDrawerClose, contact, loading }) => {
 
 	const [modalOpen, setModalOpen] = useState(false);
 	const [scheduleModal, setScheduleModal] = useState(false);
-
 	const [scheduleCancelModal, setScheduleCancelModal] = useState(false);
 	const [scheduleDetailsModal, setScheduleDetailsModal] = useState(false);
 	const [scheduled, setScheduled] = useState({});
-
+	const [scheduleds, setScheduleds] = useState([]);
 	const handleOpenScheduleModal = () => {
-		
+
 		setScheduleModal(true)
 	}
 	const handleClosedScheduleModal = () => {
@@ -136,9 +136,42 @@ const ContactDrawer = ({ open, handleDrawerClose, contact, loading }) => {
 	const handleClosedScheduleDetailsModal = () => {
 		setScheduleDetailsModal(false)
 	}
-	const loadScheduleds=()=>{
-        alert("carregando agendamentos novamente")
-    }
+	const loadScheduleds = async () => {
+
+		try {
+			const result = await api.post("scheduleds/search", {
+				number: contact.number,
+
+			});
+			setScheduleds(result.data)
+
+		} catch (err) {
+
+			toastError(err);
+		}
+	}
+	
+
+	useEffect(() => {
+		const loadInitial = async () => {
+
+            try {
+                const result = await api.post("scheduleds/search", {
+					number: contact.number,
+
+                });
+
+                setScheduleds(result.data)
+
+            } catch (err) {
+
+                toastError(err);
+            }
+        }
+        loadInitial()
+
+		
+	}, [contact.number])
 	return (
 		<Drawer
 			className={classes.drawer}
@@ -198,7 +231,7 @@ const ContactDrawer = ({ open, handleDrawerClose, contact, loading }) => {
 								<Typography variant="subtitle2" style={{ color: "#888E93" }}>Email: {contact.email}</Typography>
 								{contact?.extraInfo?.map(info => (
 
-									<Typography variant="subtitle2" style={{ color: "#888E93" }} >
+									<Typography variant="subtitle2" style={{ color: "#888E93" }} key={info.id} >
 										{info.name}: {info.value}
 									</Typography>
 
@@ -223,8 +256,8 @@ const ContactDrawer = ({ open, handleDrawerClose, contact, loading }) => {
 								<List >
 
 
-									{contact?.extraInfo?.map((info, i) => (
-										<ScheduleItemCustom openCancelModal={handleOpenScheduleCancelModal} openDetailsModal={handleOpenScheduleDetailsModal} scheduled={{id:i}} />
+									{scheduleds?.map((scheduled) => (
+										<ScheduleItemCustom openCancelModal={handleOpenScheduleCancelModal} openDetailsModal={handleOpenScheduleDetailsModal} scheduled={scheduled} key={scheduled.id} />
 									))}
 
 
@@ -247,10 +280,10 @@ const ContactDrawer = ({ open, handleDrawerClose, contact, loading }) => {
 
 				</div>
 			)}
-			<ScheduleModal openStatus={scheduleModal} handleClose={handleClosedScheduleModal} callback={loadScheduleds}/>
-			<ScheduleCancelModal openStatus={scheduleCancelModal} handleClose={handleClosedScheduleCancelModal} value={scheduled} callback={loadScheduleds}/>
+			<ScheduleModal openStatus={scheduleModal} handleClose={handleClosedScheduleModal} callback={loadScheduleds} />
+			<ScheduleCancelModal openStatus={scheduleCancelModal} handleClose={handleClosedScheduleCancelModal} value={scheduled} callback={loadScheduleds} />
 
-			<ScheduledDetailsModal openStatus={scheduleDetailsModal} handleClose={handleClosedScheduleDetailsModal} value={scheduled}  callback={loadScheduleds}/>
+			<ScheduledDetailsModal openStatus={scheduleDetailsModal} handleClose={handleClosedScheduleDetailsModal} value={scheduled} callback={loadScheduleds} />
 		</Drawer>
 
 	);
