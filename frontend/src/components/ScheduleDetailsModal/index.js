@@ -30,7 +30,11 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: "#FE517B",
         color: "#fff", margin: 20
     }, body: {
-        height: "100%", width: "100%"
+        height: "100%", width: "100%",
+
+        display:"flex",
+        flexDirection:"column",
+        justifyContent:"space-between"
     }, chip: {
         margin: 2
     }

@@ -252,7 +252,7 @@ const ScheduleModal = ({ handleClose, openStatus, value, callback }) => {
 
                 callback();
 
-                handleClose();
+                handleCloseModal()
 
             } catch (err) {
 
@@ -264,7 +264,7 @@ const ScheduleModal = ({ handleClose, openStatus, value, callback }) => {
 
                 callback();
 
-                handleClose();
+                handleCloseModal()
 
             } catch (err) {
 
@@ -322,10 +322,11 @@ const ScheduleModal = ({ handleClose, openStatus, value, callback }) => {
         const {
             target: { value },
         } = event;
-        setParticipantes(
 
+        setParticipantes(
             value
         );
+
     };
     const handleChangeAnfitriao = (event) => {
         const {
@@ -365,7 +366,7 @@ const ScheduleModal = ({ handleClose, openStatus, value, callback }) => {
     }
     useEffect(() => {
         if (value !== undefined) {
-        
+
             setStartDate(
                 new Date(value.startDate))
             setEndDate(
@@ -423,7 +424,7 @@ const ScheduleModal = ({ handleClose, openStatus, value, callback }) => {
 
     }, [searchParam, value])
     const handleCloseModal = () => {
-       
+
         setActiveStep(0);
         setSkipped(new Set());
         setStartDate(
@@ -443,7 +444,7 @@ const ScheduleModal = ({ handleClose, openStatus, value, callback }) => {
         setRecorrencia(1);
         setLevel(1);
         setNotificationType([1]);
-        setNotifyDate(startDate);
+        setNotifyDate(new Date());
         setDatesNotify([]);
         setOpenContactModal(false)
         setOptions([]);
@@ -810,19 +811,19 @@ const ScheduleModal = ({ handleClose, openStatus, value, callback }) => {
 
                                             }}>
 
-                                                {datesNotify.map((value) => 
-                                                    <div  key={value.id}>
-                                                    <ListItem
-                                                       
-                                                        disableGutters
-                                                        style={{ display: "flex", flexDirection: "row", justifyContent: "space-around", alignContent: "center", height: "100%", padding: 0, margin: 0 }}
-                                                    >
+                                                {datesNotify.map((value) =>
+                                                    <div key={value.id}>
+                                                        <ListItem
 
-                                                        <Typography     variant="caption">{` ${new Date(value).toLocaleString('pt-br')}`}</Typography>
-                                                        <IconButton     aria-label="comment" style={{ color: "grey", height: "100%" }} onClick={() => removeDateNotify(value)}>
-                                                            <DeleteForeverIcon />
-                                                        </IconButton></ListItem>
-                                                        </div>
+                                                            disableGutters
+                                                            style={{ display: "flex", flexDirection: "row", justifyContent: "space-around", alignContent: "center", height: "100%", padding: 0, margin: 0 }}
+                                                        >
+
+                                                            <Typography variant="caption">{` ${new Date(value).toLocaleString('pt-br')}`}</Typography>
+                                                            <IconButton aria-label="comment" style={{ color: "grey", height: "100%" }} onClick={() => removeDateNotify(value)}>
+                                                                <DeleteForeverIcon />
+                                                            </IconButton></ListItem>
+                                                    </div>
                                                 )}
                                             </List>
 
