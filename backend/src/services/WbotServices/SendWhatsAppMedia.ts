@@ -1,3 +1,4 @@
+
 import fs from "fs";
 import { MessageMedia, Message as WbotMessage } from "whatsapp-web.js";
 import AppError from "../../errors/AppError";
@@ -5,7 +6,6 @@ import GetTicketWbot from "../../helpers/GetTicketWbot";
 import Ticket from "../../models/Ticket";
 
 import formatBody from "../../helpers/Mustache";
-
 interface Request {
   media: Express.Multer.File;
   ticket: Ticket;
@@ -28,20 +28,19 @@ const SendWhatsAppMedia = async ({
       `${ticket.contact.number}@${ticket.isGroup ? "g" : "c"}.us`,
       newMedia,
       {
-        caption: hasBody,
-        sendAudioAsVoice: true
+        sendAudioAsVoice: true,
+      
       }
     );
-
     await ticket.update({ lastMessage: body || media.filename });
-
     fs.unlinkSync(media.path);
 
     return sentMessage;
   } catch (err) {
-    console.log(err);
+    
     throw new AppError("ERR_SENDING_WAPP_MSG");
   }
 };
 
 export default SendWhatsAppMedia;
+

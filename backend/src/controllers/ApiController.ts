@@ -50,14 +50,14 @@ const createContact = async (
 
   const contact = await CreateOrUpdateContactService(contactData);
 
-  let whatsapp:Whatsapp | null;
+  let whatsapp: Whatsapp | null;
 
-  if(whatsappId === undefined) {
+  if (whatsappId === undefined) {
     whatsapp = await GetDefaultWhatsApp();
   } else {
     whatsapp = await Whatsapp.findByPk(whatsappId);
 
-    if(whatsapp === null) {
+    if (whatsapp === null) {
       throw new AppError(`whatsapp #${whatsappId} not found`);
     }
   }
@@ -77,18 +77,22 @@ const createContact = async (
 
 export const index = async (req: Request, res: Response): Promise<Response> => {
   const newContact: ContactData = req.body;
+
   const { whatsappId }: WhatsappData = req.body;
-  const { body, quotedMsg }: MessageData = req.body;
+  var { body, quotedMsg }: MessageData = req.body;
   const medias = req.files as Express.Multer.File[];
 
-  newContact.number = newContact.number.replace("-", "").replace(" ", "");
+  if (newContact.number) {
+    newContact.number = newContact.number.replace("-", "").replace(" ", "");
+  }
+
+  
 
   const schema = Yup.object().shape({
     number: Yup.string()
       .required()
       .matches(/^\d+$/, "Invalid number format. Only numbers is allowed.")
   });
-
   try {
     await schema.validate(newContact);
   } catch (err: any) {
@@ -97,14 +101,29 @@ export const index = async (req: Request, res: Response): Promise<Response> => {
 
   const contactAndTicket = await createContact(whatsappId, newContact.number);
 
-  if (medias) {
+  if (medias && body) {
+
     await Promise.all(
       medias.map(async (media: Express.Multer.File) => {
         await SendWhatsAppMedia({ body, media, ticket: contactAndTicket });
       })
     );
-  } else {
     await SendWhatsAppMessage({ body, ticket: contactAndTicket, quotedMsg });
+
+  } else if (medias && !body) {
+
+    await Promise.all(
+      medias.map(async (media: Express.Multer.File) => {
+        await SendWhatsAppMedia({ body, media, ticket: contactAndTicket });
+      })
+    );
+
+  } else if (body) {
+
+    await SendWhatsAppMessage({ body, ticket: contactAndTicket, quotedMsg });
+
+  } else {
+    throw new AppError('NOT_DATA_FOUND')
   }
 
   return res.send();
