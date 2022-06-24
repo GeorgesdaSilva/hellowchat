@@ -29,19 +29,22 @@ const ScheduleItemCustom = ({ openDetailsModal, openCancelModal, scheduled }) =>
             + (currentdate.getMonth() + 1) + "/"
             + currentdate.getFullYear() + " "
             + currentdate.getHours() + ":"
-            + currentdate.getMinutes() + " " ;
-          
+            + `${currentdate.getMinutes() < 10 ? "0" + currentdate.getMinutes() : currentdate.getMinutes()} `;
+
         return datetime;
     }
     const parseEndDate = (date) => {
         var currentdate = date;
         var datetime = currentdate.getHours() + ":"
-            + currentdate.getMinutes() ;
-           
+            + currentdate.getMinutes();
+
         return datetime;
     }
     return (
-        <Paper elevation={0} className={classes.scheduleContainer}>
+
+        <Paper elevation={0} className={classes.scheduleContainer} style={
+            scheduled.status === "open" ? { borderLeft:"5px solid #0D99FF"} : { borderLeft:"5px solid #D4EADD" }
+        }>
             <ListItemText
 
 
@@ -106,7 +109,7 @@ const ScheduleItemCustom = ({ openDetailsModal, openCancelModal, scheduled }) =>
                             >
                                 Responsável:  <strong>{scheduled?.anfitriao?.name}</strong>
                             </Typography>
-                            <Chip label="Confirmado" size="small" style={{ backgroundColor: "#D4EADD", color: "#64A57B" }} />
+                            <Chip label={scheduled.status === "open" ? "Pendente" : "Concluído"} size="small" style={scheduled.status === "open" ? { backgroundColor: "#0D99FF", color: "#fff" } : { backgroundColor: "#D4EADD", color: "#64A57B" }} />
 
                         </div>
 

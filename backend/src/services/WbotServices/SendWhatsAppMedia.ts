@@ -28,7 +28,7 @@ const SendWhatsAppMedia = async ({
       `${ticket.contact.number}@${ticket.isGroup ? "g" : "c"}.us`,
       newMedia,
       {
-        caption: hasBody,
+        // caption: hasBody,
         sendAudioAsVoice: true
       }
     );

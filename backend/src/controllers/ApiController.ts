@@ -4,6 +4,7 @@ import AppError from "../errors/AppError";
 import GetDefaultWhatsApp from "../helpers/GetDefaultWhatsApp";
 import SetTicketMessagesAsRead from "../helpers/SetTicketMessagesAsRead";
 import Message from "../models/Message";
+import Ticket from "../models/Ticket";
 import Whatsapp from "../models/Whatsapp";
 import CreateOrUpdateContactService from "../services/ContactServices/CreateOrUpdateContactService";
 import FindOrCreateTicketService from "../services/TicketServices/FindOrCreateTicketService";
@@ -50,14 +51,14 @@ const createContact = async (
 
   const contact = await CreateOrUpdateContactService(contactData);
 
-  let whatsapp:Whatsapp | null;
+  let whatsapp: Whatsapp | null;
 
-  if(whatsappId === undefined) {
+  if (whatsappId === undefined) {
     whatsapp = await GetDefaultWhatsApp();
   } else {
     whatsapp = await Whatsapp.findByPk(whatsappId);
 
-    if(whatsapp === null) {
+    if (whatsapp === null) {
       throw new AppError(`whatsapp #${whatsappId} not found`);
     }
   }
@@ -77,34 +78,85 @@ const createContact = async (
 
 export const index = async (req: Request, res: Response): Promise<Response> => {
   const newContact: ContactData = req.body;
+  const contacts = req.body as Array<ContactData>;
   const { whatsappId }: WhatsappData = req.body;
   const { body, quotedMsg }: MessageData = req.body;
   const medias = req.files as Express.Multer.File[];
 
-  newContact.number = newContact.number.replace("-", "").replace(" ", "");
+  if (newContact.number) {
+    newContact.number = newContact.number.replace("-", "").replace(" ", "");
+  }
+  if (contacts) {
+    contacts.map((e) => e!.number = e.number.replace("-", "").replace(" ", ""));
+  }
+
+
 
   const schema = Yup.object().shape({
     number: Yup.string()
       .required()
       .matches(/^\d+$/, "Invalid number format. Only numbers is allowed.")
   });
+  var newListContacts;
+  if (contacts.length > 0) {
 
-  try {
-    await schema.validate(newContact);
-  } catch (err: any) {
-    throw new AppError(err.message);
+    Promise.all(contacts?.map(async (e) => {
+      try {
+        await schema.validate(e);
+      } catch (err: any) {
+        throw new AppError(err.message);
+      }
+    }))
+    newListContacts = await Promise.all(contacts.map(async (e) => {
+      return await createContact(whatsappId, newContact.number);
+    }))
   }
-
   const contactAndTicket = await createContact(whatsappId, newContact.number);
 
-  if (medias) {
-    await Promise.all(
-      medias.map(async (media: Express.Multer.File) => {
-        await SendWhatsAppMedia({ body, media, ticket: contactAndTicket });
-      })
-    );
+  if (medias && body) {
+    if (newListContacts) {
+      Promise.all(newListContacts.map(async (e: Ticket) => {
+        await Promise.all(
+          medias.map(async (media: Express.Multer.File) => {
+            await SendWhatsAppMedia({ body, media, ticket: e });
+          })
+        );
+        await SendWhatsAppMessage({ body, ticket: e, quotedMsg });
+      }))
+    } else {
+      await Promise.all(
+        medias.map(async (media: Express.Multer.File) => {
+          await SendWhatsAppMedia({ body, media, ticket: contactAndTicket });
+        })
+      );
+      await SendWhatsAppMessage({ body, ticket: contactAndTicket, quotedMsg });
+    }
+  } else if (medias && !body) {
+    if (newListContacts) {
+      Promise.all(newListContacts.map(async (e: Ticket) => {
+        await Promise.all(
+          medias.map(async (media: Express.Multer.File) => {
+            await SendWhatsAppMedia({ body, media, ticket: e });
+          })
+        );
+      }))
+    }
+    else {
+      await Promise.all(
+        medias.map(async (media: Express.Multer.File) => {
+          await SendWhatsAppMedia({ body, media, ticket: contactAndTicket });
+        })
+      );
+    }
   } else {
-    await SendWhatsAppMessage({ body, ticket: contactAndTicket, quotedMsg });
+    if (newListContacts) {
+      Promise.all(newListContacts.map(async (e: Ticket) => {
+        await SendWhatsAppMessage({ body, ticket: e, quotedMsg });
+      }))
+    }
+    else {
+      await SendWhatsAppMessage({ body, ticket: contactAndTicket, quotedMsg });
+    }
   }
 
   return res.send();
