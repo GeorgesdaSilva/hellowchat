@@ -250,7 +250,7 @@ const TicketsManager = () => {
               yes={() => (
                 <FormControlLabel
                   label={i18n.t("tickets.buttons.showAll")}
-                  labelPlacement="left"
+                  labelPlacement="start"
                   
                   control={
                     <Switch 
@@ -288,6 +288,7 @@ const TicketsManager = () => {
           <Tab
             label={
               <Badge
+              overlap="rectangular"
                 className={classes.badge}
                 badgeContent={openCount}
                 color="primary"
@@ -300,6 +301,7 @@ const TicketsManager = () => {
           <Tab
             label={
               <Badge
+              overlap="rectangular"
                 className={classes.badge}
                 badgeContent={pendingCount}
                 color="secondary"

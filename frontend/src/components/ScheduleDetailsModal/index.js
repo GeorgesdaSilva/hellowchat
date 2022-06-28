@@ -47,12 +47,13 @@ const useStyles = makeStyles(theme => ({
 const ScheduledDetailsModal = ({ handleClose, openStatus, value, callback }) => {
     const classes = useStyles();
     const [scheduleModal, setScheduleModal] = useState(false);
+    const [scheduled,setScheduled]= useState({})
 
     const handleCloseModal = () => {
         handleClose();
     }
     const handleOpenScheduleModal = () => {
-
+        setScheduled(value)
         handleClose();
 
         setScheduleModal(true)
@@ -79,6 +80,8 @@ const ScheduledDetailsModal = ({ handleClose, openStatus, value, callback }) => 
 
         return datetime;
     }
+
+  
     return (
         <div>
             <Modal
@@ -161,7 +164,7 @@ const ScheduledDetailsModal = ({ handleClose, openStatus, value, callback }) => 
                     </div>
                 </div>
             </Modal>
-            <ScheduleModal openStatus={scheduleModal} handleClose={handleClosedScheduleModal} value={value} callback={callback} />
+            <ScheduleModal openStatus={scheduleModal} handleClose={handleClosedScheduleModal} scheduled={scheduled} callback={callback} />
         </div>
     );
 }

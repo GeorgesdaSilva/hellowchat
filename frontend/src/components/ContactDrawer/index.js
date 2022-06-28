@@ -217,7 +217,7 @@ const ContactDrawer = ({ open, handleDrawerClose, contact, loading }) => {
 								<Grid item xs={12} style={{ display: "flex", justifyContent: "space-between", flexDirection: "row", alignItems: "center" }}>
 									<Typography variant="subtitle1">Sobre</Typography>
 									<IconButton
-										size="10"
+										size="medium"
 										variant="outlined"
 										color="primary"
 
@@ -242,7 +242,7 @@ const ContactDrawer = ({ open, handleDrawerClose, contact, loading }) => {
 								<Grid item xs={12} style={{ display: "flex", justifyContent: "space-between", flexDirection: "row", alignItems: "center" }}>
 									<Typography variant="subtitle1" >Agendamentos</Typography>
 									<IconButton
-										size="10"
+										size="medium"
 										variant="outlined"
 										color="primary"
 

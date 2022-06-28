@@ -34,12 +34,14 @@ import toastError from "../../errors/toastError";
 import Autocomplete, {
     createFilterOptions,
 } from "@material-ui/lab/Autocomplete";
+
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { i18n } from "../../translate/i18n";
 import ptBR from "date-fns/locale/pt-BR";
 
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
+
 registerLocale("pt-br", ptBR);
 const steps = ['Dados de Agendamento', 'Participantes'];
 
@@ -110,7 +112,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const ScheduleModal = ({ handleClose, openStatus, value, callback }) => {
+const ScheduleModal = ({ handleClose, openStatus, scheduled, callback }) => {
     var err = {
         response: {
             data: {
@@ -227,11 +229,11 @@ const ScheduleModal = ({ handleClose, openStatus, value, callback }) => {
             setSkipped(newSkipped);
         }
 
-        var scheduled = {
+        var newScheduled = {
 
 
-            'startDate': startDate,
-            'endDate': endDate,
+            'startDate': new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate(), startDate.getHours(), startDate.getMinutes(), 0, 0),
+            'endDate': new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate(), endDate.getHours(), endDate.getMinutes(), 0, 0),
             'externals': users,
             'anfitriao': anfitriao[0],
             'attendants': participantes,
@@ -244,11 +246,11 @@ const ScheduleModal = ({ handleClose, openStatus, value, callback }) => {
             'notificationType': notificationType,
             'datesNotify': datesNotify,
         }
-        console.log(scheduled)
+        console.log(newScheduled)
 
-        if (value?.id) {
+        if (scheduled?.id) {
             try {
-                await api.put(`scheduleds/${value.id}`, scheduled);
+                await api.put(`scheduleds/${scheduled.id}`, newScheduled);
 
                 callback();
 
@@ -260,7 +262,7 @@ const ScheduleModal = ({ handleClose, openStatus, value, callback }) => {
             }
         } else {
             try {
-                await api.post("scheduleds", scheduled);
+                await api.post("scheduleds", newScheduled);
 
                 callback();
 
@@ -323,9 +325,20 @@ const ScheduleModal = ({ handleClose, openStatus, value, callback }) => {
             target: { value },
         } = event;
 
-        setParticipantes(
-            value
-        );
+        if (scheduled?.attendants === participantes) {
+            setParticipantes(
+                []
+            )
+
+        }
+        else {
+
+            setParticipantes(
+                value
+            );
+
+        }
+
 
     };
     const handleChangeAnfitriao = (event) => {
@@ -365,28 +378,27 @@ const ScheduleModal = ({ handleClose, openStatus, value, callback }) => {
 
     }
     useEffect(() => {
-        if (value !== undefined) {
+
+        if (scheduled !== undefined) {
 
             setStartDate(
-                new Date(value.startDate))
+                new Date(scheduled.startDate))
             setEndDate(
-                new Date(value.endDate)
+                new Date(scheduled.endDate)
             );
 
-            setUsers(value.externals);
-            setAnfitriao([value.anfitriao]);
-            setParticipantes(value.attendants);
-            setTopico(value.title);
-            setLocale(value.locale);
-            setDescription(value.description);
-            setTypeEvent(value.typeEvent);
-            setRecorrencia(value.recorrency);
-            setLevel(value.level);
-            setNotificationType(value.notificationType);
-            setNotifyDate(new Date(value.startDate));
-            setDatesNotify(value.datesNotify);
-
-
+            setUsers(scheduled.externals);
+            setAnfitriao([scheduled.anfitriao]);
+            setParticipantes(scheduled.attendants);
+            setTopico(scheduled.title);
+            setLocale(scheduled.locale);
+            setDescription(scheduled.description);
+            setTypeEvent(scheduled.typeEvent);
+            setRecorrencia(scheduled.recorrency);
+            setLevel(scheduled.level);
+            setNotificationType(scheduled.notificationType);
+            setNotifyDate(new Date(scheduled.startDate));
+            setDatesNotify(scheduled.datesNotify);
         }
 
         const delayDebounceFn = setTimeout(() => {
@@ -422,7 +434,7 @@ const ScheduleModal = ({ handleClose, openStatus, value, callback }) => {
         }, 500);
         return () => clearTimeout(delayDebounceFn);
 
-    }, [searchParam, value])
+    }, [searchParam, scheduled])
     const handleCloseModal = () => {
 
         setActiveStep(0);
@@ -433,22 +445,6 @@ const ScheduleModal = ({ handleClose, openStatus, value, callback }) => {
         setEndDate(
             new Date()
         );
-
-        setUsers([]);
-        setAnfitriao([]);
-        setParticipantes([]);
-        setTopico('');
-        setLocale('');
-        setDescription('');
-        setTypeEvent(1);
-        setRecorrencia(1);
-        setLevel(1);
-        setNotificationType([1]);
-        setNotifyDate(new Date());
-        setDatesNotify([]);
-        setOpenContactModal(false)
-        setOptions([]);
-        setSearchParam('')
 
         handleClose()
     }
@@ -642,7 +638,11 @@ const ScheduleModal = ({ handleClose, openStatus, value, callback }) => {
                             <Grid item xs={12} className={classes.gridRow}>
                                 <Grid item xs={11} >
                                     <Typography variant="subtitle1" ><strong>{i18n.t("scheduleModal.subtitles.attendants")}</strong></Typography>
-                                    <FormControl style={{ height: 44, width: "100%" }} className={classes.input}>
+                                    <FormControl style={{ height: 44, width: "100%" }} className={classes.input}
+
+
+
+                                    >
 
                                         <Select
                                             style={{ height: "100%" }}
@@ -654,6 +654,7 @@ const ScheduleModal = ({ handleClose, openStatus, value, callback }) => {
                                             onChange={handleChangeParticipantes}
 
                                             disableUnderline
+
                                             renderValue={(selected) => (
                                                 <Box sx={{ display: 'flex', gap: 0.5 }}>
                                                     {selected.map((value) => (
@@ -811,19 +812,19 @@ const ScheduleModal = ({ handleClose, openStatus, value, callback }) => {
 
                                             }}>
 
-                                                {datesNotify.map((value) =>
-                                                    <div key={value.id}>
-                                                        <ListItem
+                                                {datesNotify.map((value, i) =>
 
-                                                            disableGutters
-                                                            style={{ display: "flex", flexDirection: "row", justifyContent: "space-around", alignContent: "center", height: "100%", padding: 0, margin: 0 }}
-                                                        >
+                                                    <ListItem
+                                                        key={i}
+                                                        disableGutters
+                                                        style={{ display: "flex", flexDirection: "row", justifyContent: "space-around", alignContent: "center", height: "100%", padding: 0, margin: 0 }}
+                                                    >
 
-                                                            <Typography variant="caption">{` ${new Date(value).toLocaleString('pt-br')}`}</Typography>
-                                                            <IconButton aria-label="comment" style={{ color: "grey", height: "100%" }} onClick={() => removeDateNotify(value)}>
-                                                                <DeleteForeverIcon />
-                                                            </IconButton></ListItem>
-                                                    </div>
+                                                        <Typography variant="caption">{` ${new Date(value).toLocaleString('pt-br')}`}</Typography>
+                                                        <IconButton aria-label="comment" style={{ color: "grey", height: "100%" }} onClick={() => removeDateNotify(value)}>
+                                                            <DeleteForeverIcon />
+                                                        </IconButton></ListItem>
+
                                                 )}
                                             </List>
 

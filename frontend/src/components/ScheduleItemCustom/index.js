@@ -43,7 +43,7 @@ const ScheduleItemCustom = ({ openDetailsModal, openCancelModal, scheduled }) =>
     return (
 
         <Paper elevation={0} className={classes.scheduleContainer} style={
-            scheduled.status === "open" ? { borderLeft:"5px solid #0D99FF"} : { borderLeft:"5px solid #D4EADD" }
+            scheduled.status === "open" ? { borderLeft: "5px solid #0D99FF" } : { borderLeft: "5px solid #D4EADD" }
         }>
             <ListItemText
 
@@ -55,13 +55,13 @@ const ScheduleItemCustom = ({ openDetailsModal, openCancelModal, scheduled }) =>
                             onClick={() => openDetailsModal(scheduled)}
                             component="span"
                             variant="subtitle2"
-                            color="text.primary"
+
                             style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignContent: "center", margin: 0, padding: 0 }}
                         >
                             meeting: {scheduled.title}
                         </Typography>
                         <IconButton
-                            size="5"
+                            size="medium"
                             variant="outlined"
                             color="primary"
                             style={{ padding: 0, margin: 0 }}
@@ -79,7 +79,7 @@ const ScheduleItemCustom = ({ openDetailsModal, openCancelModal, scheduled }) =>
 
                             component="span"
                             variant="caption"
-                            color="text.primary"
+
                         >
                             {
 
@@ -92,7 +92,7 @@ const ScheduleItemCustom = ({ openDetailsModal, openCancelModal, scheduled }) =>
 
                             component="span"
                             variant="caption"
-                            color="text.primary"
+
                         >
                             <LocationOnIcon style={{ fontSize: 13 }} />
                             {scheduled.locale}
@@ -105,7 +105,7 @@ const ScheduleItemCustom = ({ openDetailsModal, openCancelModal, scheduled }) =>
                                 // sx={{ display: 'inline' }}
                                 component="span"
                                 variant="caption"
-                                color="text.primary"
+
                             >
                                 Responsável:  <strong>{scheduled?.anfitriao?.name}</strong>
                             </Typography>

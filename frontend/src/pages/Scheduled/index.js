@@ -147,7 +147,7 @@ const Scheduled = () => {
                 <TextField value={search} onChange={(e) => setSearch(e.target.value)} fullWidth InputProps={{ disableUnderline: true, className: classes.input, startAdornment: <InputAdornment position="start"><IconButton><Search /></IconButton></InputAdornment>, endAdornment: <InputAdornment position="start"><IconButton onClick={() => setSearch('')}><CloseIcon /></IconButton></InputAdornment>, }} placeholder="Insira algo..." />
                 <div className={classes.scheduleHeader}>
                     <Typography variant="h6" className={classes.titleSchedule}>Agendamentos</Typography><IconButton
-                        size="10"
+                        size="medium"
                         variant="outlined"
                         color="primary"
 
