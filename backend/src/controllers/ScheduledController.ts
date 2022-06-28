@@ -32,9 +32,9 @@ export const details = async (req: Request, res: Response): Promise<Response> =>
 export const store = async (req: Request, res: Response): Promise<Response> => {
 
 
-  const { startDate, endDate, externals, anfitriao, attendants, title, locale, description, typeEvent, recorrency, level, notificationType, datesNotify } = req.body;
+  const { startDate, endDate, externals, anfitriao, attendants, title, locale, description, typeEvent, recorrency, level, notificationType, datesNotify,user } = req.body;
 
-  const scheduled = await CreateScheduledService({ startDate, endDate, externals, anfitriao, attendants, title, locale, description, typeEvent, recorrency, level, notificationType, datesNotify });
+  const scheduled = await CreateScheduledService({ startDate, endDate, externals, anfitriao, attendants, title, locale, description, typeEvent, recorrency, level, notificationType, datesNotify,user });
   const parseInitialDate = (date: Date) => {
     var currentdate = date;
     var datetime = currentdate.getDate() + "/"

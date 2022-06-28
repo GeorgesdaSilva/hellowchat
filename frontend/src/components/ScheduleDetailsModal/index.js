@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -8,6 +8,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import ScheduleModal from "../ScheduleModal/index";
 
 import Chip from '@material-ui/core/Chip';
+import { AuthContext } from '../../context/Auth/AuthContext';
 const useStyles = makeStyles(theme => ({
     modal: {
         display: "flex", justifyContent: "center", alignContent: "center", alignItems: "center"
@@ -32,9 +33,9 @@ const useStyles = makeStyles(theme => ({
     }, body: {
         height: "100%", width: "100%",
 
-        display:"flex",
-        flexDirection:"column",
-        justifyContent:"space-between"
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between"
     }, chip: {
         margin: 2
     }
@@ -47,8 +48,8 @@ const useStyles = makeStyles(theme => ({
 const ScheduledDetailsModal = ({ handleClose, openStatus, value, callback }) => {
     const classes = useStyles();
     const [scheduleModal, setScheduleModal] = useState(false);
-    const [scheduled,setScheduled]= useState({})
-
+    const [scheduled, setScheduled] = useState({})
+    const { user } = useContext(AuthContext)
     const handleCloseModal = () => {
         handleClose();
     }
@@ -81,7 +82,7 @@ const ScheduledDetailsModal = ({ handleClose, openStatus, value, callback }) => 
         return datetime;
     }
 
-  
+
     return (
         <div>
             <Modal
@@ -103,6 +104,10 @@ const ScheduledDetailsModal = ({ handleClose, openStatus, value, callback }) => 
                         <div className={classes.row}>
 
                             <Typography variant="subtitle1" ><strong>Anfitrião:</strong> {value?.anfitriao?.name}</Typography>
+                        </div>
+                        <div className={classes.row}>
+
+                            <Typography variant="subtitle1" ><strong>Criador do evento:</strong>  {value?.user?.name || "Alex raul"}</Typography>
                         </div>
                         <div className={classes.row}>
 
@@ -158,8 +163,8 @@ const ScheduledDetailsModal = ({ handleClose, openStatus, value, callback }) => 
 
                         </div>
                         <div style={{ display: "flex", justifyContent: "center", alignContent: "center" }}>
+                            {value?.user?.id === user?.id || value?.anfitriao?.id ===user.id ? <Button onClick={() => handleOpenScheduleModal()} className={classes.button}>Editar agendamento</Button> : null}
 
-                            <Button onClick={() => handleOpenScheduleModal()} className={classes.button}>Editar agendamento</Button>
                         </div>
                     </div>
                 </div>

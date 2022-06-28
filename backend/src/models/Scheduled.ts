@@ -38,6 +38,8 @@ class Scheduled extends Model<Scheduled> {
 
     @Column(DataType.JSONB)
     anfitriao: User;
+    @Column(DataType.JSONB)
+    user: User;
 
     @Column
     startDate: Date;

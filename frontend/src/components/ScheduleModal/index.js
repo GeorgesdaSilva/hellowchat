@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect ,useContext} from 'react';
 import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -41,7 +41,7 @@ import ptBR from "date-fns/locale/pt-BR";
 
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
-
+import { AuthContext } from "../../context/Auth/AuthContext";
 registerLocale("pt-br", ptBR);
 const steps = ['Dados de Agendamento', 'Participantes'];
 
@@ -121,6 +121,7 @@ const ScheduleModal = ({ handleClose, openStatus, scheduled, callback }) => {
         }
 
     }
+    const { user } = useContext(AuthContext);
     const classes = useStyles();
     const [activeStep, setActiveStep] = React.useState(0);
     const [skipped, setSkipped] = React.useState(new Set());
@@ -245,6 +246,7 @@ const ScheduleModal = ({ handleClose, openStatus, scheduled, callback }) => {
             'level': level,
             'notificationType': notificationType,
             'datesNotify': datesNotify,
+            'user':user
         }
         console.log(newScheduled)
 

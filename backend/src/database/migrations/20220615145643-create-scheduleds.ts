@@ -17,21 +17,15 @@ module.exports = {
       },
       anfitriao: {
         type: DataTypes.JSONB,
-        // references: { model: "Contacts", key: "id" },
-        // onUpdate: "CASCADE",
-        // onDelete: "CASCADE"
+     
       },
       startDate: {
         type: DataTypes.DATE,
-        // references: { model: "Users", key: "id" },
-        // onUpdate: "CASCADE",
-        // onDelete: "SET NULL"
+      
       },
       endDate: {
         type: DataTypes.DATE,
-        // references: { model: "Users", key: "id" },
-        // onUpdate: "CASCADE",
-        // onDelete: "SET NULL"
+       
       },
       recorrency: {
         type: DataTypes.INTEGER,
@@ -43,6 +37,10 @@ module.exports = {
       description: {
         type: DataTypes.STRING,
         defaultValue: "",
+      },
+      user: {
+        type:DataTypes.JSONB,
+      
       },
       typeEvent: {
         type: DataTypes.INTEGER,

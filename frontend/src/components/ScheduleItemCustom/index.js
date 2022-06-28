@@ -1,5 +1,5 @@
 
-import React from 'react'
+import React, { useContext } from 'react'
 import Paper from "@material-ui/core/Paper";
 import Chip from '@material-ui/core/Chip';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
@@ -8,6 +8,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import { makeStyles } from "@material-ui/core/styles";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from '@material-ui/core/Typography'
+import { AuthContext } from '../../context/Auth/AuthContext';
 const useStyles = makeStyles(theme => ({
 
     scheduleContainer: {
@@ -22,7 +23,7 @@ const useStyles = makeStyles(theme => ({
 const ScheduleItemCustom = ({ openDetailsModal, openCancelModal, scheduled }) => {
     const classes = useStyles();
 
-
+    const { user } = useContext(AuthContext)
     const parseInitialDate = (date) => {
         var currentdate = date;
         var datetime = currentdate.getDate() + "/"
@@ -60,15 +61,16 @@ const ScheduleItemCustom = ({ openDetailsModal, openCancelModal, scheduled }) =>
                         >
                             meeting: {scheduled.title}
                         </Typography>
-                        <IconButton
-                            size="medium"
-                            variant="outlined"
-                            color="primary"
-                            style={{ padding: 0, margin: 0 }}
-                            onClick={() => openCancelModal(scheduled)}
-                        >
-                            <DeleteSweep style={{ color: "#888E93" }} />
-                        </IconButton>
+                        {scheduled?.user?.id === user?.id || scheduled?.anfitriao?.id === user.id ?
+                            <IconButton
+                                size="medium"
+                                variant="outlined"
+                                color="primary"
+                                style={{ padding: 0, margin: 0 }}
+                                onClick={() => openCancelModal(scheduled)}
+                            >
+                                <DeleteSweep style={{ color: "#888E93" }} />
+                            </IconButton> : null}
 
                     </div>
                 }
