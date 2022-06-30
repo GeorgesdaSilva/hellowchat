@@ -1,4 +1,4 @@
-import React, { useEffect ,useContext} from 'react';
+import React, { useEffect, useContext } from 'react';
 import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -246,7 +246,7 @@ const ScheduleModal = ({ handleClose, openStatus, scheduled, callback }) => {
             'level': level,
             'notificationType': notificationType,
             'datesNotify': datesNotify,
-            'user':user
+            'user': user
         }
         console.log(newScheduled)
 
@@ -800,7 +800,7 @@ const ScheduleModal = ({ handleClose, openStatus, scheduled, callback }) => {
                                         <Grid item xs={2}>
                                             <Button onClick={() => {
 
-                                                setDatesNotify([...datesNotify, notifyDate])
+                                                setDatesNotify([...datesNotify, new Date(notifyDate.getFullYear(), notifyDate.getMonth(), notifyDate.getDate(), notifyDate.getHours(), notifyDate.getMinutes(), 0, 0)])
 
                                             }}>
                                                 <AddAlertIcon style={{ paddingLeft: 5, fontSize: 35, color: "#FE517B" }} /></Button>

@@ -1,6 +1,6 @@
 
 import { User } from "@sentry/node";
-import {  QueryTypes } from "sequelize";
+import { QueryTypes } from "sequelize";
 import sequelize from "../../database";
 import AppError from "../../errors/AppError";
 import Contact from "../../models/Contact";
@@ -20,9 +20,9 @@ const CreateScheduledService = async ({
     var query = ' \
     SELECT * FROM "Scheduleds" \
     AS "Scheduled" \
-    WHERE ("Scheduled"."startDate" >= :startDate \
+    WHERE ("Scheduled"."endDate" > :startDate \
     AND \
-    "Scheduled"."startDate" <= :endDate)\
+    "Scheduled"."startDate" < :endDate)\
   ';
 
     var scheduleds = await sequelize.query(
@@ -64,6 +64,11 @@ const CreateScheduledService = async ({
 
     var startDate = new Date(startDate);
     var endDate = new Date(endDate);
+
+
+    datesNotify.map((e)=>{
+        return new Date(e);
+    })
     const scheduled = await Scheduled.create({
         startDate, endDate, externals, anfitriao, attendants, title, locale, description, typeEvent, recorrency, level, notificationType, datesNotify,user
     })

@@ -426,7 +426,7 @@ const handleMsgAck = async (msg: WbotMessage, ack: MessageAck) => {
 const wbotMessageListener = (wbot: Session): void => {
   wbot.on("message_create", async msg => {
 
-    if (msg.body.substring(0, 12) === '*Agendamento') {
+    if (msg.body.substring(0, 12) === '*Agendamento' || msg.body.substring(0, 13) === '*Cancelamento' || msg.body.substring(0, 9) === '*Lembrete') {
       return;
     } else {
       handleMessage(msg, wbot);

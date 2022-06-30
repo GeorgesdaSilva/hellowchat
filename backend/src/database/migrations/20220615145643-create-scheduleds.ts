@@ -54,8 +54,8 @@ module.exports = {
 
       }, 
       datesNotify: {
-        type: DataTypes.ARRAY(DataTypes.DATE),
-        allowNull: false
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        allowNull: false,
       },
       externals: {
         type: DataTypes.ARRAY(DataTypes.JSONB),

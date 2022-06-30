@@ -32,6 +32,19 @@ const ShowScheduleService = async ({ date, number, searchParams }: Request): Pro
       }
     };
   }
+
+  if(number){
+    var data = new Date();
+    const initial = new Date(data.getFullYear(), data.getMonth(), data.getDate()).setUTCHours(0, 0, 0, 0);
+    whereCondition = {
+      startDate: {
+        [Op.gte]:
+        initial,
+        
+      },
+
+    };
+  }
   var scheduleds = await Scheduled.findAll({ where: whereCondition, order: [["startDate", "DESC"]] })
   if (!scheduleds) {
     throw new AppError('NOT_FOUND_SCHEDULEDS');

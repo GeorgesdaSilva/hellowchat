@@ -77,7 +77,7 @@ const ScheduledDetailsModal = ({ handleClose, openStatus, value, callback }) => 
     const parseEndDate = (date) => {
         var currentdate = date;
         var datetime = currentdate.getHours() + ":"
-            + currentdate.getMinutes();
+        + `${currentdate.getMinutes() < 10 ? "0" + currentdate.getMinutes() : currentdate.getMinutes()} `;
 
         return datetime;
     }

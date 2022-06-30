@@ -9,6 +9,6 @@ scheduledRoutes.post("/scheduleds/search", isAuth,ScheduledController.show);
 scheduledRoutes.get("/scheduleds/:id", isAuth,ScheduledController.details);
 scheduledRoutes.post("/scheduleds",isAuth, ScheduledController.store);
 scheduledRoutes.put("/scheduleds/:id",isAuth, ScheduledController.update);
-scheduledRoutes.delete("/scheduleds/:id",isAuth, ScheduledController.remove);
+scheduledRoutes.delete("/scheduleds/:id&:notify",isAuth, ScheduledController.remove);
 
 export default scheduledRoutes;

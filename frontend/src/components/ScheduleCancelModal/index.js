@@ -46,9 +46,9 @@ const ScheduleCancelModal = ({ handleClose, openStatus, value, callback }) => {
     const handleCloseModal = () => {
         handleClose();
     }
-    const remove = async () => {
+    const remove = async (notify) => {
         try {
-            await api.delete(`scheduleds/${value.id}`);
+            await api.delete(`scheduleds/${value?.id}&${notify}`);
 
             callback()
             handleClose();
@@ -88,8 +88,8 @@ const ScheduleCancelModal = ({ handleClose, openStatus, value, callback }) => {
                         </Typography>
                     </div>
                     <div className={classes.groupButtons}>
-                        <Button className={classes.buttonNotify} onClick={() => remove()}>  {i18n.t("scheduleCancelModal.groupButtons.yesNotify")} </Button>
-                        <Button className={classes.buttonNotNotify} onClick={() => remove()}>{i18n.t("scheduleCancelModal.groupButtons.notNotify")}</Button>
+                        <Button className={classes.buttonNotify} onClick={() => remove(true)}>  {i18n.t("scheduleCancelModal.groupButtons.yesNotify")} </Button>
+                        <Button className={classes.buttonNotNotify} onClick={() => remove(false)}>{i18n.t("scheduleCancelModal.groupButtons.notNotify")}</Button>
                     </div>
 
 

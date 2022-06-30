@@ -60,8 +60,8 @@ class Scheduled extends Model<Scheduled> {
     @Column(DataType.ARRAY(DataType.NUMBER))
     notificationType: Array<number>;
 
-    @Column(DataType.ARRAY(DataType.DATE))
-    datesNotify: Array<Date>;
+    @Column(DataType.ARRAY(DataType.STRING))
+    datesNotify: Array<String>;
 
     @Column(DataType.ARRAY(DataType.JSONB))
     externals: Array<Contact>;
