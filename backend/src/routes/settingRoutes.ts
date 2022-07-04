@@ -11,5 +11,6 @@ settingRoutes.get("/settings", isAuth, SettingController.index);
 
 // change setting key to key in future
 settingRoutes.put("/settings/:settingKey", isAuth, SettingController.update);
-
+settingRoutes.get("/openingHours", isAuth, SettingController.openingHours);
+settingRoutes.put("/openingHours", isAuth, SettingController.openingHoursEdit);
 export default settingRoutes;

@@ -24,6 +24,7 @@ import { debounce } from "../../helpers/Debounce";
 import UpdateTicketService from "../TicketServices/UpdateTicketService";
 import CreateContactService from "../ContactServices/CreateContactService";
 import formatBody from "../../helpers/Mustache";
+import OpeningHours from "../../models/OpeningHour";
 
 interface Session extends Client {
   id?: number;
@@ -173,32 +174,56 @@ const verifyQueue = async (
     });
 
     const body = formatBody(`\u200e${choosenQueue.greetingMessage}`, contact);
-
     const sentMessage = await wbot.sendMessage(`${contact.number}@c.us`, body);
-
     await verifyMessage(sentMessage, ticket, contact);
   } else {
     let options = "";
-
     queues.forEach((queue, index) => {
       options += `*${index + 1}* - ${queue.name}\n`;
     });
-
     const body = formatBody(`\u200e${greetingMessage}\n${options}`, contact);
+    const openingHours = await OpeningHours.findOne({ where: { id: 1 } });
+    const awaymessage = formatBody(`\u200e${openingHours?.message}`, contact);//mensagem de ausência
+    var now = new Date();
+    var day = openingHours?.days[new Date().getDay()];
+    var start1 = new Date(day!.start1);
+    var start2 = new Date(day!.start2);
+    var end1 = new Date(day!.end1);
+    var end2 = new Date(day!.end2);
+    var t1 = new Date(new Date(now.getFullYear(), now.getMonth(), now.getDate(), start1.getHours(), start1.getMinutes()));
+    var e1 = new Date(new Date(now.getFullYear(), now.getMonth(), now.getDate(), end1.getHours(), end1.getMinutes()));
+    var t2 = new Date(new Date(now.getFullYear(), now.getMonth(), now.getDate(), start2.getHours(), start2.getMinutes()));
+    var e2 = new Date(new Date(now.getFullYear(), now.getMonth(), now.getDate(), end2.getHours(), end2.getMinutes()));
+    var isManha = (now >= t1 && now <= e1)
+    var isTarde = (now >= t2 && now <= e2)
+    if ((day!.open && isManha) || (day!.open && isTarde)) {
+      const debouncedSentMessage = debounce(
+        async () => {
+          const sentMessage = await wbot.sendMessage(
+            `${contact.number}@c.us`,
+            body
+          );
+          verifyMessage(sentMessage, ticket, contact);
+        },
+        3000,
+        ticket.id
+      );
+      debouncedSentMessage();
+    } else {
+      const debouncedSentMessage = debounce(
+        async () => {
+          const sentMessage = await wbot.sendMessage(
+            `${contact.number}@c.us`,
+            awaymessage
+          );
+          verifyMessage(sentMessage, ticket, contact);
+        },
+        3000,
+        ticket.id
+      );
+      debouncedSentMessage();
 
-    const debouncedSentMessage = debounce(
-      async () => {
-        const sentMessage = await wbot.sendMessage(
-          `${contact.number}@c.us`,
-          body
-        );
-        verifyMessage(sentMessage, ticket, contact);
-      },
-      3000,
-      ticket.id
-    );
-
-    debouncedSentMessage();
+    }
   }
 };
 

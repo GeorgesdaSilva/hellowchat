@@ -248,8 +248,6 @@ const ScheduleModal = ({ handleClose, openStatus, scheduled, callback }) => {
             'datesNotify': datesNotify,
             'user': user
         }
-        console.log(newScheduled)
-
         if (scheduled?.id) {
             try {
                 await api.put(`scheduleds/${scheduled.id}`, newScheduled);
