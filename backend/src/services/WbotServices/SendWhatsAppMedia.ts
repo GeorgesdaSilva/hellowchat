@@ -28,13 +28,8 @@ const SendWhatsAppMedia = async ({
       `${ticket.contact.number}@${ticket.isGroup ? "g" : "c"}.us`,
       newMedia,
       {
-<<<<<<< HEAD
         sendAudioAsVoice: true,
       
-=======
-        // caption: hasBody,
-        sendAudioAsVoice: true
->>>>>>> scheduled
       }
     );
     await ticket.update({ lastMessage: body || media.filename });
