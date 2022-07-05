@@ -10,8 +10,8 @@ module.exports = {
       id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
-        primaryKey: true,
-        defaultValue:1
+        primaryKey: true
+  
       },
       message: {
         type: DataTypes.STRING,
