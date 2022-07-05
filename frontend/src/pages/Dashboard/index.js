@@ -269,7 +269,7 @@ const Dashboard = () => {
 		return (
 			<Dialog onClose={handleClose} open={open} >
 				<DialogTitle>Mais opções de filtro</DialogTitle>
-				<Grid container xs={12} className={classes.dialog} >
+				<Grid container  className={classes.dialog} >
 					{user.profile === 'admin' ? <Select
 						className={classes.dialogItems}
 						value={userId}
@@ -437,7 +437,7 @@ const Dashboard = () => {
 							<Table aria-label="a dense table" >
 								<TableHead>
 									<TableRow>
-										<p className={classes.tableCell} style={{ paddingLeft: 60, paddingBottom: 10, paddingTop: 10 }}>Ranking Atendimento</p>
+										<TableCell className={classes.tableCell} style={{ paddingLeft: 60, paddingBottom: 10, paddingTop: 10 }}>Ranking Atendimento</TableCell>
 
 									</TableRow>
 									<TableRow>

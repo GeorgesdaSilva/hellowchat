@@ -100,7 +100,7 @@ const useAuth = () => {
 				}
 				 
 			  });
-			history.push("/tickets");
+			history.push("/");
 			setLoading(false);
 		} catch (err) {
 			toastError(err);

@@ -29,7 +29,9 @@ interface Response {
 const ListTicketsServiceFull = async ({
   dateInitial, dateFinal, userId
 }: Request): Promise<Response> => {
-  let conditions = {}
+  let conditions = {
+    
+  }
 
   if (userId) {
     conditions = {
@@ -37,6 +39,12 @@ const ListTicketsServiceFull = async ({
       userId: userId
     }
 
+  }
+  else{
+    conditions = {
+      ...conditions,
+      userId: {[Op.not]: null}
+    }
   }
 
   if (dateInitial

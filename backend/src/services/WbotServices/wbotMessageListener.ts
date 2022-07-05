@@ -23,7 +23,6 @@ import ShowWhatsAppService from "../WhatsappService/ShowWhatsAppService";
 import { debounce } from "../../helpers/Debounce";
 import UpdateTicketService from "../TicketServices/UpdateTicketService";
 import CreateContactService from "../ContactServices/CreateContactService";
-import GetContactService from "../ContactServices/GetContactService";
 import formatBody from "../../helpers/Mustache";
 
 interface Session extends Client {
@@ -426,7 +425,12 @@ const handleMsgAck = async (msg: WbotMessage, ack: MessageAck) => {
 
 const wbotMessageListener = (wbot: Session): void => {
   wbot.on("message_create", async msg => {
-    handleMessage(msg, wbot);
+
+    if (msg.body.substring(0, 12) === '*Agendamento' || msg.body.substring(0, 13) === '*Cancelamento' || msg.body.substring(0, 9) === '*Lembrete') {
+      return;
+    } else {
+      handleMessage(msg, wbot);
+    }
   });
 
   wbot.on("media_uploaded", async msg => {

@@ -72,7 +72,7 @@ const messages = {
         title: "Conexões",
         toasts: {
           deleted: "Conexão com o WhatsApp excluída com sucesso!",
-          
+
         },
         confirmationModal: {
           deleteTitle: "Deletar",
@@ -242,7 +242,7 @@ const messages = {
         buttons: {
           newTicket: "Novo",
         },
-       
+
       },
       ticketsQueueSelect: {
         placeholder: "Filas",
@@ -283,8 +283,8 @@ const messages = {
         pendingHeader: "Aguardando",
         assignedHeader: "Atendendo",
         noTicketsTitle: "Nada aqui!",
-        timeTicketOpen:"Tempo de chamada:",
-        timeTicketPending:"Aguardando a:",
+        timeTicketOpen: "Tempo de chamada:",
+        timeTicketPending: "Aguardando a:",
         noTicketsMessage:
           "Nenhum ticket encontrado com esse status ou termo pesquisado",
         connectionTitle: "Conexão que está sendo utilizada atualmente.",
@@ -448,6 +448,39 @@ const messages = {
           message: "Esta ação não pode ser revertida.",
         },
       },
+      scheduleModal: {
+        subtitles: {
+          title: "Título",
+          typeEvent: "Tipo de evento",
+          recurrence: "Recorrência",
+          priority: "Prioridade",
+          description: "Descrição",
+          host: "Anfitrião",
+          attendants: "Usuários",
+          externals: "Participantes",
+          notification: "Notificação"
+
+        },
+        labels: {
+          topic: "Informações que identifique o assunto que será abordado. ",
+          locale: "Adicionar local",
+          description: "Descrição do Agendamento exemplo Pauta  de reunião, Descrição de consulta",
+
+        }
+      },
+      scheduleCancelModal: {
+        title: "Você tem certeza?",
+        subtitle: " Este agendamento será excluído!! Deseja notificar os participantes?",
+        groupButtons: {
+          yesNotify: "Sim, Notificar",
+          notNotify: "Não notificar"
+        }
+      },
+
+
+
+
+
       backendErrors: {
         ERR_NO_OTHER_WHATSAPP: "Deve haver pelo menos um WhatsApp padrão.",
         ERR_NO_DEF_WAPP_FOUND:
@@ -483,7 +516,7 @@ const messages = {
           "Esta cor já está em uso, escolha outra.",
         ERR_WAPP_GREETING_REQUIRED:
           "A mensagem de saudação é obrigatório quando há mais de uma fila.",
-          ERR_LOGOUT_WHATS:"Erro ao desconectar, por favor desconecte através do smartphone."
+        ERR_LOGOUT_WHATS: "Erro ao desconectar, por favor desconecte através do smartphone."
       },
     },
   },

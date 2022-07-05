@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
@@ -6,16 +6,27 @@ import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import Drawer from "@material-ui/core/Drawer";
 import Link from "@material-ui/core/Link";
-import InputLabel from "@material-ui/core/InputLabel";
+import api from "../../services/api";
+import toastError from "../../errors/toastError";
 import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
+
 import Paper from "@material-ui/core/Paper";
+import Edit from '@material-ui/icons/Edit';
+
+import AddAlarm from '@material-ui/icons/AddAlarm';
 
 import { i18n } from "../../translate/i18n";
+import List from '@material-ui/core/List';
+
 
 import ContactModal from "../ContactModal";
 import ContactDrawerSkeleton from "../ContactDrawerSkeleton";
-import MarkdownWrapper from "../MarkdownWrapper";
+import ScheduleModal from "../ScheduleModal/index";
+import ScheduleCancelModal from "../ScheduleCancelModal/index";
+import ScheduledDetailsModal from "../ScheduleDetailsModal";
+import { Grid } from "@material-ui/core";
+
+import ScheduleItemCustom from "../ScheduleItemCustom";
 
 const drawerWidth = 320;
 
@@ -23,6 +34,7 @@ const useStyles = makeStyles(theme => ({
 	drawer: {
 		width: drawerWidth,
 		flexShrink: 0,
+
 	},
 	drawerPaper: {
 		width: drawerWidth,
@@ -32,6 +44,9 @@ const useStyles = makeStyles(theme => ({
 		borderBottom: "1px solid rgba(0, 0, 0, 0.12)",
 		borderTopRightRadius: 4,
 		borderBottomRightRadius: 4,
+		padding: 0,
+
+
 	},
 	header: {
 		display: "flex",
@@ -41,21 +56,23 @@ const useStyles = makeStyles(theme => ({
 		padding: theme.spacing(0, 1),
 		minHeight: "73px",
 		justifyContent: "flex-start",
+
 	},
 	content: {
 		display: "flex",
 		backgroundColor: "#eee",
 		flexDirection: "column",
-		padding: "8px 0px 8px 8px",
+		padding: 0,
 		height: "100%",
 		overflowY: "scroll",
 		...theme.scrollbarStyles,
+
 	},
 
 	contactAvatar: {
 		margin: 15,
-		width: 160,
-		height: 160,
+		width: 65,
+		height: 65,
 	},
 
 	contactHeader: {
@@ -79,13 +96,82 @@ const useStyles = makeStyles(theme => ({
 		marginTop: 4,
 		padding: 6,
 	},
+	contact: {
+		justifyContent: "center", alignContent: "center", flexDirection: "column", display: "flex",
+		padding: 2
+	},
+
+
 }));
 
 const ContactDrawer = ({ open, handleDrawerClose, contact, loading }) => {
 	const classes = useStyles();
 
 	const [modalOpen, setModalOpen] = useState(false);
+	const [scheduleModal, setScheduleModal] = useState(false);
+	const [scheduleCancelModal, setScheduleCancelModal] = useState(false);
+	const [scheduleDetailsModal, setScheduleDetailsModal] = useState(false);
+	const [scheduled, setScheduled] = useState({});
+	const [scheduleds, setScheduleds] = useState([]);
+	const handleOpenScheduleModal = () => {
 
+		setScheduleModal(true)
+	}
+	const handleClosedScheduleModal = () => {
+		setScheduleModal(false)
+	}
+	const handleOpenScheduleCancelModal = (value) => {
+
+		setScheduled(value)
+		setScheduleCancelModal(true)
+	}
+	const handleClosedScheduleCancelModal = () => {
+
+		setScheduleCancelModal(false)
+	}
+	const handleOpenScheduleDetailsModal = (value) => {
+		setScheduled(value)
+		setScheduleDetailsModal(true)
+	}
+	const handleClosedScheduleDetailsModal = () => {
+		setScheduleDetailsModal(false)
+	}
+	const loadScheduleds = async () => {
+
+		try {
+			const result = await api.post("scheduleds/search", {
+				number: contact.number,
+
+			});
+			setScheduleds(result.data)
+
+		} catch (err) {
+
+			toastError(err);
+		}
+	}
+	
+
+	useEffect(() => {
+		const loadInitial = async () => {
+
+            try {
+                const result = await api.post("scheduleds/search", {
+					number: contact.number,
+
+                });
+
+                setScheduleds(result.data)
+
+            } catch (err) {
+
+                toastError(err);
+            }
+        }
+        loadInitial()
+
+		
+	}, [contact.number])
 	return (
 		<Drawer
 			className={classes.drawer}
@@ -102,63 +188,104 @@ const ContactDrawer = ({ open, handleDrawerClose, contact, loading }) => {
 				paper: classes.drawerPaper,
 			}}
 		>
-			<div className={classes.header}>
-				<IconButton onClick={handleDrawerClose}>
-					<CloseIcon />
-				</IconButton>
-				<Typography style={{ justifySelf: "center" }}>
-					{i18n.t("contactDrawer.header")}
-				</Typography>
-			</div>
+
 			{loading ? (
 				<ContactDrawerSkeleton classes={classes} />
 			) : (
 				<div className={classes.content}>
-					<Paper square variant="outlined" className={classes.contactHeader}>
-						<Avatar
-							alt={contact.name}
-							src={contact.profilePicUrl}
-							className={classes.contactAvatar}
-						></Avatar>
+					<Paper square variant="outlined" className={classes.contactHeader} elevation={0}>
 
-						<Typography>{contact.name}</Typography>
-						<Typography>
-							<Link href={`tel:${contact.number}`}>{contact.number}</Link>
-						</Typography>
-						<Button
-							variant="outlined"
-							color="primary"
-							onClick={() => setModalOpen(true)}
-						>
-							{i18n.t("contactDrawer.buttons.edit")}
-						</Button>
-					</Paper>
-					<Paper square variant="outlined" className={classes.contactDetails}>
-						<ContactModal
-							open={modalOpen}
-							onClose={() => setModalOpen(false)}
-							contactId={contact.id}
-						></ContactModal>
-						<Typography variant="subtitle1">
-							{i18n.t("contactDrawer.extraInfo")}
-						</Typography>
-						{contact?.extraInfo?.map(info => (
-							<Paper
-								key={info.id}
-								square
-								variant="outlined"
-								className={classes.contactExtraInfo}
-							>
-								<InputLabel>{info.name}</InputLabel>
-								<Typography component="div" noWrap style={{ paddingTop: 2 }}>
-									<MarkdownWrapper>{info.value}</MarkdownWrapper>
+						<Grid container justifyContent="center" alignContent="center">
+							<Grid item xs={12} style={{ display: "flex", flexDirection: "row" }}>	<IconButton onClick={handleDrawerClose}>
+								<CloseIcon />
+							</IconButton>
+								<Typography style={{ display: "flex", justifyContent: "center", alignContent: "center", flexDirection: "column" }}>
+									{i18n.t("contactDrawer.header")}
 								</Typography>
-							</Paper>
-						))}
+							</Grid>
+							<Grid item xs={4}>
+								<Avatar
+									alt={contact.name}
+									src={contact.profilePicUrl}
+									className={classes.contactAvatar}
+								></Avatar>
+							</Grid>
+							<Grid item xs={6} className={classes.contact} >
+								<Typography>{contact.name}</Typography>
+							</Grid>
+							<Grid item xs={12} className={classes.contact} >
+								<Grid item xs={12} style={{ display: "flex", justifyContent: "space-between", flexDirection: "row", alignItems: "center" }}>
+									<Typography variant="subtitle1">Sobre</Typography>
+									<IconButton
+										size="medium"
+										variant="outlined"
+										color="primary"
+
+										onClick={() => setModalOpen(true)}
+									>
+										<Edit />
+									</IconButton>
+								</Grid>
+
+								<Typography variant="subtitle2" style={{ color: "#888E93" }}>Telefone: <Link href={`tel:${contact.number}`}>{contact.number}</Link></Typography>
+								<Typography variant="subtitle2" style={{ color: "#888E93" }}>Email: {contact.email}</Typography>
+								{contact?.extraInfo?.map(info => (
+
+									<Typography variant="subtitle2" style={{ color: "#888E93" }} key={info.id} >
+										{info.name}: {info.value}
+									</Typography>
+
+								))}
+
+							</Grid>
+							<Grid item xs={12} className={classes.contact} >
+								<Grid item xs={12} style={{ display: "flex", justifyContent: "space-between", flexDirection: "row", alignItems: "center" }}>
+									<Typography variant="subtitle1" >Agendamentos</Typography>
+									<IconButton
+										size="medium"
+										variant="outlined"
+										color="primary"
+
+										onClick={() => handleOpenScheduleModal()}
+									>
+										<AddAlarm />
+									</IconButton>
+								</Grid>
+
+
+								<List >
+
+
+									{scheduleds?.map((scheduled) => (
+										<ScheduleItemCustom openCancelModal={handleOpenScheduleCancelModal} openDetailsModal={handleOpenScheduleDetailsModal} scheduled={scheduled} key={scheduled.id} />
+									))}
+
+
+								</List>
+
+
+
+							</Grid>
+
+						</Grid>
+
+
 					</Paper>
+
+					<ContactModal
+						open={modalOpen}
+						onClose={() => setModalOpen(false)}
+						contactId={contact.id}
+					></ContactModal>
+
 				</div>
 			)}
+			<ScheduleModal openStatus={scheduleModal} handleClose={handleClosedScheduleModal} callback={loadScheduleds} />
+			<ScheduleCancelModal openStatus={scheduleCancelModal} handleClose={handleClosedScheduleCancelModal} value={scheduled} callback={loadScheduleds} />
+
+			<ScheduledDetailsModal openStatus={scheduleDetailsModal} handleClose={handleClosedScheduleDetailsModal} value={scheduled} callback={loadScheduleds} />
 		</Drawer>
+
 	);
 };
 

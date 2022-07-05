@@ -7,6 +7,7 @@ import Message from "../../models/Message";
 import Ticket from "../../models/Ticket";
 
 import formatBody from "../../helpers/Mustache";
+import CreateMessageService from "../MessageServices/CreateMessageService";
 
 interface Request {
   body: string;
@@ -28,16 +29,18 @@ const SendWhatsAppMessage = async ({
   const wbot = await GetTicketWbot(ticket);
 
   try {
+
     const sentMessage = await wbot.sendMessage(
       `${ticket.contact.number}@${ticket.isGroup ? "g" : "c"}.us`,
-      formatBody(body, ticket.contact ),
+      formatBody(body, ticket.contact),
       {
         quotedMessageId: quotedMsgSerializedId,
         linkPreview: false
       }
     );
 
-    await ticket.update({ lastMessage: body });
+    await CreateMessageService({ messageData: { body: body, id: sentMessage.id.id, ticketId: ticket.id, contactId: ticket.contactId, fromMe: true, read: false } })
+    await ticket.update({ lastMessage: body, },);
     return sentMessage;
   } catch (err) {
     throw new AppError("ERR_SENDING_WAPP_MSG");
