@@ -7,6 +7,7 @@ import FindOrCreateTicketService from "../TicketServices/FindOrCreateTicketServi
 import SendWhatsAppMessage from "../WbotServices/SendWhatsAppMessage";
 import Ticket from "../../models/Ticket";
 
+
 const NotificationScheduledService = async (): Promise<void> => {
     var data = new Date();
     data.setMilliseconds(0)
