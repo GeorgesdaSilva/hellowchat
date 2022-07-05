@@ -395,6 +395,9 @@ const messages = {
               disabled: "Desativado",
             },
           },
+          openingHours:{
+            update:"Horário de atendimento atualizado com sucesso."
+          }
         },
       },
       messagesList: {
