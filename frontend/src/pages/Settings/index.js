@@ -92,6 +92,7 @@ const Settings = () => {
 				await api.put('/openingHours', {
 					openingHours: openingHours
 				});
+				
 				toast.success(i18n.t("settings.settings.openingHours.update"), {
 					style: {
 						backgroundColor: "#D4EADD",
@@ -112,8 +113,6 @@ const Settings = () => {
 			const update = async () => {
 				try {
 					const { data } = await api.get("/openinghours");
-
-
 					setOpeningHours(data)
 				} catch (err) {
 					toastError(err);
