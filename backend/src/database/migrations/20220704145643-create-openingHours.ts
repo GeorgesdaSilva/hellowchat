@@ -19,15 +19,15 @@ module.exports = {
       },
       days: {
         type: DataTypes.ARRAY(DataTypes.JSONB),
-        defaultValue: [
-          { "index": 0, "label": "Domingo", "open": false, "start1": start1, "end1": end1, "start2": start2, "end2": end2 },
-          { "index": 1, "label": "Segunda", "open": true, "start1": start1, "end1": end1, "start2": start2, "end2": end2 },
-          { "index": 2, "label": "Terça", "open": true, "start1": start1, "end1": end1, "start2": start2, "end2": end2 },
-          { "index": 3, "label": "Quarta", "open": true, "start1": start1, "end1": end1, "start2": start2, "end2": end2 },
-          { "index": 4, "label": "Quinta", "open": true, "start1": start1, "end1": end1, "start2": start2, "end2": end2 },
-          { "index": 5, "label": "Sexta", "open": true, "start1": start1, "end1": end1, "start2": start2, "end2": end2 },
-          { "index": 6, "label": "Sábado", "open": false, "start1": start1, "end1": end1, "start2": start2, "end2": end2 }
-        ]
+        // defaultValue: [
+        //   { "index": 0, "label": "Domingo", "open": false, "start1": start1, "end1": end1, "start2": start2, "end2": end2 },
+        //   { "index": 1, "label": "Segunda", "open": true, "start1": start1, "end1": end1, "start2": start2, "end2": end2 },
+        //   { "index": 2, "label": "Terça", "open": true, "start1": start1, "end1": end1, "start2": start2, "end2": end2 },
+        //   { "index": 3, "label": "Quarta", "open": true, "start1": start1, "end1": end1, "start2": start2, "end2": end2 },
+        //   { "index": 4, "label": "Quinta", "open": true, "start1": start1, "end1": end1, "start2": start2, "end2": end2 },
+        //   { "index": 5, "label": "Sexta", "open": true, "start1": start1, "end1": end1, "start2": start2, "end2": end2 },
+        //   { "index": 6, "label": "Sábado", "open": false, "start1": start1, "end1": end1, "start2": start2, "end2": end2 }
+        // ]
       },
       createdAt: {
         type: DataTypes.DATE(),
