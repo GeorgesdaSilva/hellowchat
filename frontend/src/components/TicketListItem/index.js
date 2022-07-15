@@ -246,7 +246,7 @@ const TicketListItem = ({ ticket }) => {
 					title={ticket.queue?.name || "Sem fila"}
 				>
 					<span
-						style={{ backgroundColor: ticket.queue?.color || ticket.userId?"#7C7C7C":"#Ffff", borderRadius: "10px 0px 0px 10px" }}
+						style={{ backgroundColor: ticket.queue?.color || "#7C7C7C", borderRadius: "10px 0px 0px 10px" }}
 						className={classes.ticketQueueColor}
 					></span>
 				</Tooltip>
